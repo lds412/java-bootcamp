@@ -441,6 +441,6 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-/Classwork/M2/ClassModeling/target/
-/Classwork/M2/Refactoring/target/
-/Classwork/M2/SimpleCalculator/target/
+
+# Target file
+target/
