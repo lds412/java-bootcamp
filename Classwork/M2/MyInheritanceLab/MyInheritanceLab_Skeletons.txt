@@ -1,0 +1,12 @@
+Note:  public classes MUST be in separate source files
+
+public class Person{
+
+
+}
+
+
+public class Address{
+
+
+}
