@@ -9,7 +9,7 @@ package com.lds.myinheritance;
  *
  * @author lydia
  */
-public class Contractor extends Person{
+public class Contractor extends Person implements Payable{
     private boolean permanent;
     private double hourlyRate;
     
@@ -38,5 +38,10 @@ public class Contractor extends Person{
     @Override
     public String toString(){
         return super.toString()+"\nPermanent: "+permanent+"\nHourly Rate: $"+hourlyRate;
+    }
+
+    @Override
+    public double calculateWeeklyPay() {
+        return hourlyRate*40;
     }
 }
