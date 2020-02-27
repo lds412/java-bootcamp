@@ -10,9 +10,9 @@ package com.lds.myinheritance;
  * @author lydia
  */
 public class Person implements Comparable{
-    protected String name;
-    protected int age;
-    protected Address address;
+    private String name;
+    private int age;
+    private Address address;
 
     //This is for testing 
     public static void main(String[] args) {
