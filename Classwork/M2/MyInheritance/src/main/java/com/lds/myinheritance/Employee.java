@@ -9,7 +9,7 @@ package com.lds.myinheritance;
  *
  * @author lydia
  */
-public class Employee extends Person {
+public class Employee extends Person implements Payable{
 
     private double salary;
 
@@ -37,5 +37,10 @@ public class Employee extends Person {
     @Override
     public String toString(){
         return super.toString()+"\nSalary: $"+salary;
+    }
+
+    @Override
+    public double calculateWeeklyPay() {
+        return salary/52;
     }
 }
