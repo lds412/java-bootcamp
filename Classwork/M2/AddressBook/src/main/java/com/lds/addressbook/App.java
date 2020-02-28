@@ -6,14 +6,23 @@
 package com.lds.addressbook;
 
 import com.lds.addressbook.controller.AddressBookController;
+import com.lds.addressbook.dao.AddressBookDao;
+import com.lds.addressbook.dao.AddressBookDaoFileImpl;
+import com.lds.addressbook.ui.AddressBookView;
+import com.lds.addressbook.ui.UserIO;
+import com.lds.addressbook.ui.UserIOConsoleImpl;
 
 /**
  *
  * @author lydia
  */
 public class App {
+
     public static void main(String[] args) {
-        AddressBookController controller = new AddressBookController();
+        UserIO myIo = new UserIOConsoleImpl();
+        AddressBookView myView = new AddressBookView(myIo);
+        AddressBookDao myDao = new AddressBookDaoFileImpl();
+        AddressBookController controller = new AddressBookController(myView, myDao);
         controller.run();
     }
 }
