@@ -14,13 +14,14 @@ import java.util.List;
  */
 public class AddressBookView {
 
-    UserIO io = new UserIOConsoleImpl();
+    UserIO io;
 
-//    public AddressBookView(UserIO io) {
-//        this.io = io;
-//    }
+    public AddressBookView(UserIO io) {
+        this.io = io;
+    }
 
-    public int printMenuAndGetSelection() {
+    public String printMenuAndGetSelection() {
+        io.print("\t==========");
         io.print("Initial Menu:");
         io.print("\t1. Add Address");
         io.print("\t2. Delete Address");
@@ -29,11 +30,12 @@ public class AddressBookView {
         io.print("\t5. List All Addresses");
         io.print("\t6. Exit"); //Take this out??
 
-        return io.readInt("Please select from the above choices: ", 1, 6);
+        //return io.readInt("Please select from the above choices: ", 1, 6);
+        return io.readString("Please select from the above choices: ");
     }
 
     public Address getNewAddressInfo() {
-        io.print("Add Address Menu:");
+        io.print("\nAdd Address Menu:");
         String firstName = io.readString("\tPlease enter First Name: ");
         String lastName = io.readString("\tPlease enter Last Name: ");
         String streetAddress = io.readString("\tPlease enter Street Address: ");
@@ -49,65 +51,82 @@ public class AddressBookView {
         return currentAddress;
     }
 
-//    public void displayAddAddressBanner() {
-//        io.print("=== Add Address ===");
-//    }
     public void displayAddSuccessBanner() {
         io.readString(
                 "\tAddress added. Press 1 to go to Main Menu. ");
     }
 
     public void displayAddressList(List<Address> addressList) {
-        io.print("List Addresses Menu:");
+        io.print("\nList Addresses Menu:");
         for (Address currentAddress : addressList) {
-            io.print(currentAddress.getFirstName() + " "
+            io.print("\t" + currentAddress.getFirstName() + " "
                     + currentAddress.getLastName());
-            io.print(currentAddress.getStreetAddress());
-            io.print(currentAddress.getCity() + ", "
+            io.print("\t" + currentAddress.getStreetAddress());
+            io.print("\t" + currentAddress.getCity() + ", "
                     + currentAddress.getState() + " "
                     + currentAddress.getZip() + "\n");
         }
-        io.readString("Press 1 to go to Main Menu. ");
+        io.readString("\tPress 1 to go to Main Menu. ");
+    }
+    
+    public void genericEndMessage(){
+        io.readString("\tPress 1 to go to Main Menu. ");
     }
 
-//    public void displayDisplayAllBanner() {
-//        io.print("=== Display All Students ===");
-//    }
+    public String findAddressByLastName() {
+        io.print("\nFind Address Menu:");
+        return io.readString("\tPlease enter last name of address to find: ");
+    }
 
-    public String getLastNameChoice() {
-        return io.readString("Please enter last name of address to find: ");
+    public String removeAddressByLastName() {
+        io.print("\nDelete Address Menu:");
+        return io.readString("\tPlease enter last name of address to delete: ");
+    }
+
+    public boolean reallyDelete() {
+        boolean valid = false;
+        while (!valid) {
+            String ans = io.readString("\tReally Delete? (y/n): ");
+            if (ans.equals("y")) {
+                return true;
+            } else if (ans.equals("n")) {
+                return false;
+            } else {
+                displayUnknownCommandBanner();
+            }
+        }
+        return false; //Just to make IDE happy
+    }
+    
+    public void deleteAborted(){
+        io.readString("\tDelete Aborted. Press 1 to go to Main Menu. ");
     }
 
     public void displayAddress(Address address) {
         if (address != null) {
-            io.print(address.getFirstName() + " "
+            io.print("\n\t" + address.getFirstName() + " "
                     + address.getLastName());
-            io.print(address.getStreetAddress());
-            io.print(address.getCity() + ", "
+            io.print("\t" + address.getStreetAddress());
+            io.print("\t" + address.getCity() + ", "
                     + address.getState() + " "
                     + address.getZip() + "\n");
         } else {
-            io.print("No such address.");
+            io.print("\tNo such address.");
         }
-        io.readString("Press 1 to go to Main Menu. ");
-    }
-
-    public void displayRemoveAddressBanner() {
-        io.print("=== Remove Address ===");
     }
 
     public void displayRemoveSuccessBanner() {
-        io.readString("Address Deleted. Press 1 to go to Main Menu. ");
+        io.readString("\tAddress Deleted. Press 1 to go to Main Menu. ");
     }
 
-    public void displayAddressCount(int length){
-        io.print("List Address Count Menu:");
+    public void displayAddressCount(int length) {
+        io.print("\nList Address Count Menu:");
         io.readString("\t There are " + length
                 + " addresses in the book. Press 1 to go to Main Menu. ");
     }
-    
+
     public void displayExitBanner() {
-        io.print("Good Bye!!!");
+        io.print("\nGood Bye!!!");
     }
 
     public void displayUnknownCommandBanner() {
