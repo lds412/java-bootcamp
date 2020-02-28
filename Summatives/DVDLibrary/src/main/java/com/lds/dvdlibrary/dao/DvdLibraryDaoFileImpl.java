@@ -1,0 +1,145 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.lds.dvdlibrary.dao;
+
+import com.lds.dvdlibrary.dto.Dvd;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
+
+/**
+ *
+ * @author lydia
+ */
+public class DvdLibraryDaoFileImpl implements DvdLibraryDao{
+
+    public static final String DVD_FILE = "dvds.txt";
+    public static final String DELIMITER = "::";
+    
+    private Map<String, Dvd> dvds = new HashMap<>();
+    
+    @Override
+    public Dvd addDvd(String title, Dvd dvd) throws DvdLibraryDaoException {
+        loadDvds();
+        Dvd newDvd = dvds.put(title, dvd);
+        writeDvds();
+        return newDvd;
+    }
+
+    @Override
+    public Dvd removeDvd(String title) throws DvdLibraryDaoException {
+        loadDvds();
+        Dvd removedDvd = dvds.remove(title);
+        writeDvds();
+        return removedDvd;
+    }
+
+    @Override
+    public Dvd saveEdits(String title) throws DvdLibraryDaoException { 
+        //loadDvds();
+        //Dvd editedDvd = dvds.get(title);
+        writeDvds();
+        return dvds.get(title);
+    }
+
+    @Override
+    public List<Dvd> listDvds() throws DvdLibraryDaoException {
+        loadDvds();
+        return new ArrayList<Dvd>(dvds.values());
+    }
+
+    @Override
+    public Dvd displayDvd(String title) throws DvdLibraryDaoException {
+        loadDvds();
+        return dvds.get(title);
+    }
+    
+    private Dvd unmarshallDvd(String dvdAsText) {
+        String[] dvdTokens = dvdAsText.split(DELIMITER);
+        String title = dvdTokens[0];
+        Dvd dvdFromFile = new Dvd(title);
+
+        dvdFromFile.setReleaseDate(dvdTokens[1]);
+        dvdFromFile.setMpaaRating(dvdTokens[2]);
+        dvdFromFile.setDirector(dvdTokens[3]);
+        dvdFromFile.setStudio(dvdTokens[4]);
+        dvdFromFile.setUserNotes(dvdTokens[5]);
+
+        return dvdFromFile;
+    }
+
+    private void loadDvds() throws DvdLibraryDaoException {
+        Scanner s;
+
+        try {
+            s = new Scanner(new BufferedReader(new FileReader(DVD_FILE)));
+        } catch (FileNotFoundException e) {
+            throw new DvdLibraryDaoException(
+                    "-_- Could not load DVD library into memory.", e);
+        }
+
+        String currentLine;
+        Dvd currentDvd;
+
+        while (s.hasNextLine()) {
+            // get the next line in the file
+            currentLine = s.nextLine();
+            // unmarshall the line into a Student
+            currentDvd = unmarshallDvd(currentLine);
+
+            // We are going to use the student id as the map key for our student object.
+            // Put currentStudent into the map using student id as the key
+            dvds.put(currentDvd.getTitle(), currentDvd);
+        }
+        // close scanner
+        s.close();
+    }
+
+    private String marshallDvd(Dvd aDvd) {
+
+        String dvdAsText = aDvd.getTitle() + DELIMITER;
+        dvdAsText += aDvd.getReleaseDate() + DELIMITER;
+        dvdAsText += aDvd.getMpaaRating() + DELIMITER;
+        dvdAsText += aDvd.getDirector() + DELIMITER;
+        dvdAsText += aDvd.getStudio() + DELIMITER;
+        dvdAsText += aDvd.getUserNotes();
+        return dvdAsText;
+    }
+
+    /**
+     * Writes all DVDs in library out to a DVD_FILE. See loadDvds
+     * for file format.
+     *
+     * @throws DvdLibraryDaoException if an error occurs writing to the file
+     */
+    private void writeDvds() throws DvdLibraryDaoException {
+        PrintWriter out;
+
+        try {
+            out = new PrintWriter(new FileWriter(DVD_FILE));
+        } catch (IOException e) {
+            throw new DvdLibraryDaoException(
+                    "Could not save dvd data.", e);
+        }
+
+        String dvdAsText;
+        List<Dvd> dvdList = this.listDvds();
+        for (Dvd currentDvd : dvdList) {
+            dvdAsText = marshallDvd(currentDvd);
+            out.println(dvdAsText);
+            out.flush();
+        }
+        out.close();
+    }
+}
