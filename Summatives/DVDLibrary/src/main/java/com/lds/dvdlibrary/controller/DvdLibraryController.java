@@ -69,18 +69,22 @@ public class DvdLibraryController {
     private void addDvd() throws DvdLibraryDaoException {
         Dvd newDvd = view.getNewDvdInfo();
         dao.addDvd(newDvd.getTitle(), newDvd);
-        //view.displayAddSuccessBanner();
+        view.displayAddSuccessful();
     }
 
     private void removeDvd() throws DvdLibraryDaoException {
         String title = view.removeDvdByTitle();
         Dvd dvd = dao.displayDvd(title);
         view.displayDvd(dvd);
-        if (view.reallyDelete()) {
-            dao.removeDvd(title);
-            //view.displayRemoveSuccessBanner();
+        if (dvd == null) {
+            view.displayContinueMessage();
         } else {
-            view.deleteAborted();
+            if (view.reallyDelete()) {
+                dao.removeDvd(title);
+                view.displayRemoveSuccessful();
+            } else {
+                view.deleteAborted();
+            }
         }
     }
 
@@ -88,38 +92,48 @@ public class DvdLibraryController {
         String title = view.editDvdByTitle();
         Dvd dvd = dao.displayDvd(title);
         view.displayDvd(dvd);
-        String chosenEdit = view.chooseEdit();
-        switch (chosenEdit) {
-            case "0":
-                view.editCanceled();
-                dao.saveEdits(title);
-                break;
-            case "1":
-                view.editTitle(dvd);
-                dao.saveEdits(title);
-                break;
-            case "2":
-                view.editDate(dvd);
-                dao.saveEdits(title);
-                break;
-            case "3":
-                view.editRating(dvd);
-                dao.saveEdits(title);
-                break;
-            case "4":
-                view.editDirector(dvd);
-                dao.saveEdits(title);
-                break;
-            case "5":
-                view.editStudio(dvd);
-                dao.saveEdits(title);
-                break;
-            case "6":
-                view.editNotes(dvd);
-                dao.saveEdits(title);
-                break;
-            default:
-                unknownCommand();
+        if (dvd == null) {
+            view.displayContinueMessage();
+        } else {
+            String chosenEdit = view.chooseEdit();
+            switch (chosenEdit) {
+                case "0":
+                    view.editCanceled();
+                    dao.saveEdits(title);
+                    break;
+                case "1":
+                    view.editTitle(dvd);
+                    view.displayEditSuccessful();
+                    dao.saveEdits(title);
+                    break;
+                case "2":
+                    view.editDate(dvd);
+                    view.displayEditSuccessful();
+                    dao.saveEdits(title);
+                    break;
+                case "3":
+                    view.editRating(dvd);
+                    view.displayEditSuccessful();
+                    dao.saveEdits(title);
+                    break;
+                case "4":
+                    view.editDirector(dvd);
+                    view.displayEditSuccessful();
+                    dao.saveEdits(title);
+                    break;
+                case "5":
+                    view.editStudio(dvd);
+                    view.displayEditSuccessful();
+                    dao.saveEdits(title);
+                    break;
+                case "6":
+                    view.editNotes(dvd);
+                    view.displayEditSuccessful();
+                    dao.saveEdits(title);
+                    break;
+                default:
+                    unknownCommand();
+            }
         }
     }
 
@@ -132,7 +146,7 @@ public class DvdLibraryController {
         String title = view.findDvdByTitle();
         Dvd dvd = dao.displayDvd(title);
         view.displayDvd(dvd);
-        //view.genericEndMessage();
+        view.displayContinueMessage();
     }
 
     private void unknownCommand() {

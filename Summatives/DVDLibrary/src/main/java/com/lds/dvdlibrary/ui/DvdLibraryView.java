@@ -75,6 +75,14 @@ public class DvdLibraryView {
         dvd.setUserNotes(userNotes);
     }
     
+    public void displayAddSuccessful(){
+        io.readString("\n\tDVD added. Press enter to continue. ");
+    }
+    
+    public void displayEditSuccessful(){
+        io.readString("\n\tDVD edited. Press enter to continue. ");
+    }
+    
     public void displayDvdList(List<Dvd> dvdList) {
         io.print("\nList DVDs:");
         for (Dvd currentDvd : dvdList) {
@@ -90,13 +98,17 @@ public class DvdLibraryView {
             io.print("\t" + dvd.getDirector() + ", " + dvd.getStudio());
             io.print("\t" + dvd.getUserNotes() + "\n");
         } else {
-            io.print("\tNo such DVD in library.");
+            io.print("\n\tNo such DVD in library.\n");
         }
+    }
+    
+    public void displayContinueMessage(){
+        io.readString("\tPress enter to continue. ");
     }
     
     public String editDvdByTitle(){
         io.print("\nEdit DVD:");
-        return io.readString("Please enter title of DVD to edit: ");
+        return io.readString("\tPlease enter title of DVD to edit: ");
     }
     
     public String chooseEdit(){
@@ -117,7 +129,7 @@ public class DvdLibraryView {
     
     public String findDvdByTitle() {
         io.print("\nView DVD:");
-        return io.readString("Please enter title of DVD to view: ");
+        return io.readString("\tPlease enter title of DVD to view: ");
     }
 
     public String removeDvdByTitle() {
@@ -141,7 +153,11 @@ public class DvdLibraryView {
     }
     
     public void deleteAborted(){
-        io.readString("\tDelete Aborted. Press enter to continue. ");
+        io.readString("\n\tDelete Aborted. Press enter to continue. ");
+    }
+    
+    public void displayRemoveSuccessful(){
+        io.readString("\n\tDVD removed. Press enter to continue. ");
     }
     
     public void displayUnknownCommandBanner() {
