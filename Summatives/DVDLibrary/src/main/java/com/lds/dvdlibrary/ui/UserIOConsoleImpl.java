@@ -107,7 +107,12 @@ public class UserIOConsoleImpl implements UserIO {
     public String readString(String prompt) {
         Scanner s = new Scanner(System.in);
         System.out.print(prompt);
-        return s.nextLine();
+        String ans = s.nextLine();
+        if (ans.equals("")){
+            return "N/A";
+        } else{
+            return ans;
+        }
     }
 
 }
