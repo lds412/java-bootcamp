@@ -5,6 +5,8 @@
  */
 package com.lds.dvdlibrary.dto;
 
+import java.util.Objects;
+
 /**
  *
  * @author lydia
@@ -68,6 +70,51 @@ public class Dvd {
 
     public void setUserNotes(String userNotes) {
         this.userNotes = userNotes;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 37 * hash + Objects.hashCode(this.title);
+        hash = 37 * hash + Objects.hashCode(this.releaseDate);
+        hash = 37 * hash + Objects.hashCode(this.mpaaRating);
+        hash = 37 * hash + Objects.hashCode(this.director);
+        hash = 37 * hash + Objects.hashCode(this.studio);
+        hash = 37 * hash + Objects.hashCode(this.userNotes);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Dvd other = (Dvd) obj;
+        if (!Objects.equals(this.title, other.title)) {
+            return false;
+        }
+        if (!Objects.equals(this.releaseDate, other.releaseDate)) {
+            return false;
+        }
+        if (!Objects.equals(this.mpaaRating, other.mpaaRating)) {
+            return false;
+        }
+        if (!Objects.equals(this.director, other.director)) {
+            return false;
+        }
+        if (!Objects.equals(this.studio, other.studio)) {
+            return false;
+        }
+        if (!Objects.equals(this.userNotes, other.userNotes)) {
+            return false;
+        }
+        return true;
     }
     
 }
