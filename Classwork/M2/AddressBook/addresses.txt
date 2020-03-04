@@ -1,2 +1,2 @@
-Dolan::Shannon::28 Paget Rd::Madison::WI::53704
-Strebe::Lydia::1313 Como Ave SE::Minneapolis::MN::55414
+Smith::Jane::123 Pleasant Rd::Minneapolis::MN::55414
+Doe::Jen::345 Honest Rd::Minneapolis::MN::55413
