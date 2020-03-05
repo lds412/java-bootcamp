@@ -1,2 +1,4 @@
-SomethingElse::SomeOtherTime::PG::SomeoneElse::SomewhereElse::It's something else
-Something::Sometime::R::Someone::Somewhere::It's something
+Jaws::1977-06-07::R::Steven::Universal::Sharks!
+SomethingElse::2030-02-03::PG::SomeoneElse::SomewhereElse::It's something else
+Something::2020-02-20::R::Someone::Somewhere::It's something
+AnotherMovie::2030-04-12::G::Steve::Studio1A::N/A

@@ -99,35 +99,41 @@ public class DvdLibraryController {
             switch (chosenEdit) {
                 case "0":
                     view.editCanceled();
-                    dao.saveEdits(title);
+                    //dao.saveEdits(title);
                     break;
                 case "1":
                     view.editTitle(dvd);
+                    view.displayDvd(dvd);
                     view.displayEditSuccessful();
                     dao.saveEdits(title);
                     break;
                 case "2":
                     view.editDate(dvd);
+                    view.displayDvd(dvd);
                     view.displayEditSuccessful();
                     dao.saveEdits(title);
                     break;
                 case "3":
                     view.editRating(dvd);
+                    view.displayDvd(dvd);
                     view.displayEditSuccessful();
                     dao.saveEdits(title);
                     break;
                 case "4":
                     view.editDirector(dvd);
+                    view.displayDvd(dvd);
                     view.displayEditSuccessful();
                     dao.saveEdits(title);
                     break;
                 case "5":
                     view.editStudio(dvd);
+                    view.displayDvd(dvd);
                     view.displayEditSuccessful();
                     dao.saveEdits(title);
                     break;
                 case "6":
                     view.editNotes(dvd);
+                    view.displayDvd(dvd);
                     view.displayEditSuccessful();
                     dao.saveEdits(title);
                     break;

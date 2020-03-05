@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,7 +33,7 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao{
     @Override
     public Dvd addDvd(String title, Dvd dvd) throws DvdLibraryDaoException {
         loadDvds();
-        Dvd newDvd = dvds.put(title, dvd);
+        Dvd newDvd = dvds.put(title.toUpperCase(), dvd);
         writeDvds();
         return newDvd;
     }
@@ -40,7 +41,7 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao{
     @Override
     public Dvd removeDvd(String title) throws DvdLibraryDaoException {
         loadDvds();
-        Dvd removedDvd = dvds.remove(title);
+        Dvd removedDvd = dvds.remove(title.toUpperCase());
         writeDvds();
         return removedDvd;
     }
@@ -50,7 +51,7 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao{
         //loadDvds();
         //Dvd editedDvd = dvds.get(title);
         writeDvds();
-        return dvds.get(title);
+        return dvds.get(title.toUpperCase());
     }
 
     @Override
@@ -62,15 +63,16 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao{
     @Override
     public Dvd displayDvd(String title) throws DvdLibraryDaoException {
         loadDvds();
-        return dvds.get(title);
+        return dvds.get(title.toUpperCase());
     }
     
     private Dvd unmarshallDvd(String dvdAsText) {
         String[] dvdTokens = dvdAsText.split(DELIMITER);
         String title = dvdTokens[0];
         Dvd dvdFromFile = new Dvd(title);
-
-        dvdFromFile.setReleaseDate(dvdTokens[1]);
+        
+        LocalDate ld = LocalDate.parse(dvdTokens[1]);
+        dvdFromFile.setReleaseDate(ld);
         dvdFromFile.setMpaaRating(dvdTokens[2]);
         dvdFromFile.setDirector(dvdTokens[3]);
         dvdFromFile.setStudio(dvdTokens[4]);
@@ -98,9 +100,9 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao{
             // unmarshall the line into a Student
             currentDvd = unmarshallDvd(currentLine);
 
-            // We are going to use the student id as the map key for our student object.
-            // Put currentStudent into the map using student id as the key
-            dvds.put(currentDvd.getTitle(), currentDvd);
+            // We are going to use the title as the map key for our dvd object.
+            // Put currentDvd into the map using title as the key
+            dvds.put(currentDvd.getTitle().toUpperCase(), currentDvd);
         }
         // close scanner
         s.close();
