@@ -5,6 +5,10 @@
  */
 package com.lds.dvdlibrary.ui;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
 /**
@@ -16,6 +20,22 @@ public class UserIOConsoleImpl implements UserIO {
     @Override
     public void print(String message) {
         System.out.println(message);
+    }
+
+    //NumberFormatException??
+    public BigDecimal readBigDecimal(String prompt, int scale, RoundingMode r) {
+        Scanner s = new Scanner(System.in);
+        System.out.print(prompt);
+        String num = s.nextLine();
+        do {
+            try {
+                BigDecimal bD = new BigDecimal(num);
+                bD = bD.setScale(scale, r);
+                return bD;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input");
+            }
+        } while (true);
     }
 
     @Override
@@ -36,7 +56,7 @@ public class UserIOConsoleImpl implements UserIO {
             d = s.nextDouble();
             if (d < min || d > max) {
                 System.out.println("That number is outside the range. Please try again.");
-            }else{
+            } else {
                 valid = true;
             }
         }
@@ -61,7 +81,7 @@ public class UserIOConsoleImpl implements UserIO {
             f = s.nextFloat();
             if (f < min || f > max) {
                 System.out.println("That number is outside the range. Please try again.");
-            }else{
+            } else {
                 valid = true;
             }
         }
@@ -72,25 +92,40 @@ public class UserIOConsoleImpl implements UserIO {
     public int readInt(String prompt) {
         Scanner s = new Scanner(System.in);
         System.out.print(prompt);
-        int integer = s.nextInt();
-        return integer;
+        String num = s.nextLine();
+        do {
+            try {
+                int integer = Integer.parseInt(num);
+                return integer;
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input");
+            }
+        } while (true);
     }
 
+    //MAKE SURE THE TRY/CATCH BLOCK WORKS (esp the boolean variable)
     @Override
     public int readInt(String prompt, int min, int max) {
         Scanner s = new Scanner(System.in);
         boolean valid = false;
         int integer = 0;
-        while (!valid) {
+        do {
             System.out.print(prompt);
-            integer = s.nextInt();
+            String num = s.nextLine();
+            while (!valid) {
+                try {
+                    integer = Integer.parseInt(num);
+                    valid = true;
+                } catch (NumberFormatException e) {
+                    System.out.println("Invalid input");
+                }
+            }
             if (integer < min || integer > max) {
                 System.out.println("That number is outside the range. Please try again.");
-            }else{
-                valid = true;
+            } else {
+                return integer;
             }
-        }
-        return integer;
+        } while (true);
     }
 
     @Override
@@ -108,11 +143,25 @@ public class UserIOConsoleImpl implements UserIO {
         Scanner s = new Scanner(System.in);
         System.out.print(prompt);
         String ans = s.nextLine();
-        if (ans.equals("")){
+        if (ans.equals("")) {
             return "N/A";
-        } else{
+        } else {
             return ans;
         }
+    }
+
+    public LocalDate readLocalDate(String prompt) {
+        Scanner s = new Scanner(System.in);
+        System.out.print(prompt);
+        String date = s.nextLine();
+        do {
+            try {
+                LocalDate ld = LocalDate.parse(date);
+                return ld;
+            } catch (DateTimeParseException e) {
+                System.out.println("Invalid date");
+            }
+        } while (true);
     }
 
 }

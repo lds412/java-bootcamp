@@ -6,6 +6,8 @@
 package com.lds.dvdlibrary.ui;
 
 import com.lds.dvdlibrary.dto.Dvd;
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 /**
@@ -41,7 +43,7 @@ public class DvdLibraryView {
             if (title.equals("N/A")) {
                 io.print("\t Please enter a value.");
                 title = io.readString("\tTitle: ");
-            } else{
+            } else {
                 valid = true;
             }
         }
@@ -60,8 +62,22 @@ public class DvdLibraryView {
     }
 
     public void editDate(Dvd dvd) {
-        String date = io.readString("\tPlease enter Release Date: ");
-        dvd.setReleaseDate(date);
+        boolean valid = true;
+        do {
+            io.print("\tPlease enter Release Date: ");
+            String year = io.readString("\tYear (yyyy): ");
+            String month = io.readString("\tMonth (mm): ");
+            String day = io.readString("\tDay (dd): ");
+            String date = year + "-" + month + "-" + day;
+            try {
+                LocalDate ld = LocalDate.parse(date);
+                dvd.setReleaseDate(ld);
+                valid = true;
+            } catch (DateTimeParseException e) {
+                io.print("\nThat is not a valid date.\n");
+                valid = false;
+            }
+        } while (!valid);
     }
 
     public void editRating(Dvd dvd) {
@@ -90,7 +106,7 @@ public class DvdLibraryView {
     }
 
     public void displayEditSuccessful() {
-        io.readString("\n\tDVD edited. Press enter to continue. ");
+        io.readString("\tDVD edited. Press enter to continue. ");
     }
 
     public void displayDvdList(List<Dvd> dvdList) {
@@ -148,8 +164,7 @@ public class DvdLibraryView {
     }
 
     public boolean reallyDelete() {
-        boolean valid = false;
-        while (!valid) {
+        do {
             String ans = io.readString("\tReally Delete? (y/n): ");
             if (ans.equals("y")) {
                 return true;
@@ -158,8 +173,7 @@ public class DvdLibraryView {
             } else {
                 displayUnknownCommandBanner();
             }
-        }
-        return false; //Just to make IDE happy
+        } while(true);
     }
 
     public void deleteAborted() {

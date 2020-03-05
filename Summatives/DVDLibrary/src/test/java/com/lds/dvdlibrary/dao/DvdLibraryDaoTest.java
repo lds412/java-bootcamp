@@ -6,6 +6,8 @@
 package com.lds.dvdlibrary.dao;
 
 import com.lds.dvdlibrary.dto.Dvd;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
@@ -21,6 +23,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class DvdLibraryDaoTest {
 
     private DvdLibraryDao dao = new DvdLibraryDaoFileImpl();
+    private LocalDate ld = LocalDate.parse("2001-01-01");
 
     public DvdLibraryDaoTest() {
     }
@@ -51,7 +54,7 @@ public class DvdLibraryDaoTest {
     @Test
     public void testAddGetDvd() throws Exception {
         Dvd dvd = new Dvd("Something");
-        dvd.setReleaseDate("Sometime");
+        dvd.setReleaseDate(ld);
         dvd.setDirector("Someone");
         dvd.setMpaaRating("R");
         dvd.setStudio("Somewhere");
@@ -70,7 +73,7 @@ public class DvdLibraryDaoTest {
     @Test
     public void testRemoveDvd() throws Exception {
         Dvd dvd1 = new Dvd("Something");
-        dvd1.setReleaseDate("Sometime");
+        dvd1.setReleaseDate(ld);
         dvd1.setDirector("Someone");
         dvd1.setMpaaRating("R");
         dvd1.setStudio("Somewhere");
@@ -79,7 +82,7 @@ public class DvdLibraryDaoTest {
         dao.addDvd(dvd1.getTitle(), dvd1);
 
         Dvd dvd2 = new Dvd("SomethingElse");
-        dvd2.setReleaseDate("SomeOtherTime");
+        dvd2.setReleaseDate(ld);
         dvd2.setDirector("SomeoneElse");
         dvd2.setMpaaRating("PG");
         dvd2.setStudio("SomewhereElse");
@@ -102,7 +105,7 @@ public class DvdLibraryDaoTest {
     @Test
     public void testSaveEdits() throws Exception {
         Dvd dvd = new Dvd("Something");
-        dvd.setReleaseDate("Sometime");
+        dvd.setReleaseDate(ld);
         dvd.setDirector("Someone");
         dvd.setMpaaRating("R");
         dvd.setStudio("Somewhere");
@@ -126,7 +129,7 @@ public class DvdLibraryDaoTest {
     @Test
     public void testListDvds() throws Exception {
         Dvd dvd1 = new Dvd("Something");
-        dvd1.setReleaseDate("Sometime");
+        dvd1.setReleaseDate(ld);
         dvd1.setDirector("Someone");
         dvd1.setMpaaRating("R");
         dvd1.setStudio("Somewhere");
@@ -135,7 +138,7 @@ public class DvdLibraryDaoTest {
         dao.addDvd(dvd1.getTitle(), dvd1);
 
         Dvd dvd2 = new Dvd("SomethingElse");
-        dvd2.setReleaseDate("SomeOtherTime");
+        dvd2.setReleaseDate(ld);
         dvd2.setDirector("SomeoneElse");
         dvd2.setMpaaRating("PG");
         dvd2.setStudio("SomewhereElse");
