@@ -14,22 +14,26 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  *
  * @author lydia
  */
-public class DvdLibraryDaoFileImpl implements DvdLibraryDao{
+public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
 
     public static final String DVD_FILE = "dvds.txt";
     public static final String DELIMITER = "::";
-    
+
     private Map<String, Dvd> dvds = new HashMap<>();
-    
+
     @Override
     public Dvd addDvd(String title, Dvd dvd) throws DvdLibraryDaoException {
         loadDvds();
@@ -47,7 +51,7 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao{
     }
 
     @Override
-    public Dvd saveEdits(String title) throws DvdLibraryDaoException { 
+    public Dvd saveEdits(String title) throws DvdLibraryDaoException {
         //loadDvds();
         //Dvd editedDvd = dvds.get(title);
         writeDvds();
@@ -65,12 +69,86 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao{
         loadDvds();
         return dvds.get(title.toUpperCase());
     }
-    
+
+    @Override
+    public List<Dvd> getDvdsYoungerThan(int ageInYears) throws DvdLibraryDaoException {
+        loadDvds();
+        return dvds.values()
+                .stream()
+                .filter(d -> d.getDvdAge() < ageInYears)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Dvd> getDvdsByMpaaRating(String mpaaRating) throws DvdLibraryDaoException {
+        loadDvds();
+        return dvds.values()
+                .stream()
+                .filter(d -> d.getMpaaRating().equalsIgnoreCase(mpaaRating))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<String, List<Dvd>> getDvdsByDirector(String director) throws DvdLibraryDaoException {
+        loadDvds();
+        return dvds.values()
+                .stream()
+                .filter(d -> d.getDirector().equalsIgnoreCase(director))
+                .collect(Collectors.groupingBy(Dvd::getMpaaRating));
+    }
+
+    @Override
+    public List<Dvd> getDvdsByStudio(String studio) throws DvdLibraryDaoException {
+        loadDvds();
+        return dvds.values()
+                .stream()
+                .filter(d -> d.getStudio().equalsIgnoreCase(studio))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public double getAverageDvdAge() throws DvdLibraryDaoException {
+        loadDvds();
+        return dvds.values()
+                .stream()
+                .mapToLong(Dvd::getDvdAge)
+                .average()
+                .getAsDouble();
+    }
+
+    @Override
+    public Map<Long, List<Dvd>> getAllDvdsGroupedByAge() throws DvdLibraryDaoException {
+        loadDvds();
+        return dvds.values()
+                .stream()
+                .collect(Collectors.groupingBy(Dvd::getDvdAge));
+    }
+
+    @Override
+    public Optional<Dvd> getNewestDvd() throws DvdLibraryDaoException {
+        loadDvds();
+        //Map<Long, List<Dvd>> mapByAge = getAllDvdsGroupByAge();
+        //Set<Long> ages = mapByAge.keySet();
+        //Long minAge = ages.stream();
+        //return mapByAge.get(minAge);
+        return dvds.values()
+                .stream()
+                .min(Comparator.comparing(Dvd::getDvdAge));
+    }
+
+    @Override
+    public Optional<Dvd> getOldestDvd() throws DvdLibraryDaoException {
+        loadDvds();
+        return dvds.values()
+                .stream()
+                .max(Comparator.comparing(Dvd::getDvdAge));
+    }
+
     private Dvd unmarshallDvd(String dvdAsText) {
         String[] dvdTokens = dvdAsText.split(DELIMITER);
         String title = dvdTokens[0];
         Dvd dvdFromFile = new Dvd(title);
-        
+
         LocalDate ld = LocalDate.parse(dvdTokens[1]);
         dvdFromFile.setReleaseDate(ld);
         dvdFromFile.setMpaaRating(dvdTokens[2]);
@@ -120,8 +198,8 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao{
     }
 
     /**
-     * Writes all DVDs in library out to a DVD_FILE. See loadDvds
-     * for file format.
+     * Writes all DVDs in library out to a DVD_FILE. See loadDvds for file
+     * format.
      *
      * @throws DvdLibraryDaoException if an error occurs writing to the file
      */

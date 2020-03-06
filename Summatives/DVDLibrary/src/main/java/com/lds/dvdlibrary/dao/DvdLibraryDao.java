@@ -7,6 +7,8 @@ package com.lds.dvdlibrary.dao;
 
 import com.lds.dvdlibrary.dto.Dvd;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 /**
  *
@@ -68,4 +70,21 @@ public interface DvdLibraryDao {
      * @throws com.lds.dvdlibrary.dao.DvdLibraryDaoException
      */
     Dvd displayDvd(String title) throws DvdLibraryDaoException;
+    
+    List<Dvd> getDvdsYoungerThan(int ageInYears) throws DvdLibraryDaoException;
+    
+    List<Dvd> getDvdsByMpaaRating(String mpaaRating) throws DvdLibraryDaoException;
+
+    Map<String, List<Dvd>> getDvdsByDirector(String director) 
+            throws DvdLibraryDaoException;
+
+    List<Dvd> getDvdsByStudio(String studio) throws DvdLibraryDaoException;
+
+    double getAverageDvdAge() throws DvdLibraryDaoException;
+
+    Map<Long, List<Dvd>> getAllDvdsGroupedByAge() throws DvdLibraryDaoException;
+
+    Optional<Dvd> getNewestDvd() throws DvdLibraryDaoException;
+
+    Optional<Dvd> getOldestDvd() throws DvdLibraryDaoException;
 }
