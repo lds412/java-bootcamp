@@ -10,6 +10,7 @@ import com.lds.dvdlibrary.ui.DvdLibraryView;
 import com.lds.dvdlibrary.dao.DvdLibraryDao;
 import com.lds.dvdlibrary.dto.Dvd;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -50,6 +51,25 @@ public class DvdLibraryController {
                         displayDvd();
                         break;
                     case "6":
+                        getDvdsYoungerThan();
+                        break;
+                    case "7":
+                        getDvdsByRating();
+                        break;
+                    case "8":
+                        getDvdsByDirector();
+                        break;
+                    case "9":
+                        getDvdsByStudio();
+                        break;
+                    case "10":
+                        getAvgAge();
+                        break;
+                    case "11":
+                        break;
+                    case "12":
+                        break;
+                    case "13":
                         keepGoing = false;
                         break;
                     default:
@@ -155,6 +175,36 @@ public class DvdLibraryController {
         view.displayContinueMessage();
     }
 
+    private void getDvdsYoungerThan() throws DvdLibraryDaoException {
+        int years = view.askForYears();
+        List<Dvd> dvdList = dao.getDvdsYoungerThan(years);
+        view.displayDvdList(dvdList);
+    }
+    
+    private void getDvdsByRating() throws DvdLibraryDaoException{
+        String ratings = view.askForRating();
+        List<Dvd> dvdList = dao.getDvdsByMpaaRating(ratings);
+        view.displayDvdList(dvdList);
+    }
+    
+    //FINISH THIS 
+    private void getDvdsByDirector() throws DvdLibraryDaoException{
+        String director = view.askForDirector();
+        Map<String, List<Dvd>> dvdMap = dao.getDvdsByDirector(director);
+    }
+    
+    private void getDvdsByStudio() throws DvdLibraryDaoException{
+        String studio = view.askForStudio();
+        List<Dvd> dvdList = dao.getDvdsByStudio(studio);
+        view.displayDvdList(dvdList);
+    }
+    
+    private void getAvgAge() throws DvdLibraryDaoException{
+        double age = dao.getAverageDvdAge();
+        view.printAvgAge(age);
+        view.displayContinueMessage();
+    }
+    
     private void unknownCommand() {
         view.displayUnknownCommandBanner();
     }

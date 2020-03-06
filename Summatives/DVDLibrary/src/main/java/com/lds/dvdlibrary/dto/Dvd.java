@@ -6,6 +6,7 @@
 package com.lds.dvdlibrary.dto;
 
 import java.time.LocalDate;
+import java.time.Period;
 import java.util.Objects;
 
 /**
@@ -71,6 +72,11 @@ public class Dvd {
 
     public void setUserNotes(String userNotes) {
         this.userNotes = userNotes;
+    }
+    
+    public long getDvdAge() {
+        Period p = releaseDate.until(LocalDate.now());
+        return p.getYears();
     }
 
     @Override

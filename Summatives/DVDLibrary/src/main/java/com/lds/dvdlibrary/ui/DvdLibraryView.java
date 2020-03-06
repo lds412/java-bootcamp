@@ -28,9 +28,16 @@ public class DvdLibraryView {
         io.print("\t1. Add DVD");
         io.print("\t2. Delete DVD");
         io.print("\t3. Edit DVD");
-        io.print("\t4. List All DVDs");
-        io.print("\t5. View Specifc DVD");
-        io.print("\t6. Exit");
+        io.print("\t4. List all DVDs");
+        io.print("\t5. View specifc DVD");
+        io.print("\t6. List all DVDs released within the last some years");
+        io.print("\t7. List all DVDs with a given MPAA rating");
+        io.print("\t8. List all DVDs with a given director");
+        io.print("\t9. List all DVDs with a given studio");
+        io.print("\t10. View average age of movies in collection");
+        io.print("\t11. View newest movie in collection");
+        io.print("\t12. View oldest movie in collection");
+        io.print("\t13. Exit");
 
         return io.readString("Please select from the above choices: ");
     }
@@ -80,21 +87,41 @@ public class DvdLibraryView {
         } while (!valid);
     }
 
+    public int askForYears() {
+        return io.readInt("How many years back do you want to go? ");
+    }
+    
+    public void printAvgAge(double age){
+        io.print("Average age of movies in collection: "+ age);
+    }
+    
     public void editRating(Dvd dvd) {
-        String rating = io.readString("\tPlease enter MPAA Rating: ");
+        String rating = askForRating();
         dvd.setMpaaRating(rating);
     }
 
+    public String askForRating() {
+        return io.readString("\tPlease enter MPAA Rating: ");
+    }
+    
     public void editDirector(Dvd dvd) {
-        String director = io.readString("\tPlease enter Director: ");
+        String director = askForDirector();
         dvd.setDirector(director);
     }
 
+    public String askForDirector() {
+        return io.readString("\tPlease enter Director: ");
+    }
+    
     public void editStudio(Dvd dvd) {
-        String studio = io.readString("\tPlease enter Studio: ");
+        String studio = askForStudio();
         dvd.setStudio(studio);
     }
 
+    public String askForStudio() {
+        return io.readString("\tPlease enter Studio: ");
+    }
+    
     public void editNotes(Dvd dvd) {
         String userNotes = io.readString("\tPlease enter any additional "
                 + "information (e.g., \"Good family movie\"): ");
@@ -112,7 +139,7 @@ public class DvdLibraryView {
     public void displayDvdList(List<Dvd> dvdList) {
         io.print("\nList DVDs:");
         for (Dvd currentDvd : dvdList) {
-            io.print("\t" + currentDvd.getTitle());
+            io.print("\t" + currentDvd.getTitle()+", age: "+currentDvd.getDvdAge());
         }
         io.readString("\n\tPress enter to continue. ");
     }
