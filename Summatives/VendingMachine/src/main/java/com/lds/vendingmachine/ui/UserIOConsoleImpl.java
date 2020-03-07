@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.lds.dvdlibrary.ui;
+package com.lds.vendingmachine.ui;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -22,6 +22,7 @@ public class UserIOConsoleImpl implements UserIO {
         System.out.println(message);
     }
 
+    @Override
     public BigDecimal readBigDecimal(String prompt, int scale, RoundingMode r) {
         Scanner s = new Scanner(System.in);
         System.out.print(prompt);
@@ -149,6 +150,7 @@ public class UserIOConsoleImpl implements UserIO {
         }
     }
 
+    @Override
     public LocalDate readLocalDate(String prompt) {
         Scanner s = new Scanner(System.in);
         System.out.print(prompt);
