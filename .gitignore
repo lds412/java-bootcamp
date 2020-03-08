@@ -441,3 +441,21 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+<<<<<<< HEAD
+# Target file
+target/
+=======
+/Summatives/RockPaperScissors/target/
+/Summatives/ConnectFour/target/
+
+/Classwork/M2/ClassModeling/target/
+/Classwork/M2/Refactoring/target/
+/Classwork/M2/SimpleCalculator/target/
+
+>>>>>>> 4cf610ce52dc0c0ad07c30241936c336420ae2b1
+/Classwork/M2/ClassRoster/nbproject/
+/Classwork/M2/AddressBook/nbproject/
+/Summatives/DVDLibrary/nbproject/
+/Classwork/M3/Week03UnitTests/nbproject/
+/Summatives/VendingMachine/nbproject/
