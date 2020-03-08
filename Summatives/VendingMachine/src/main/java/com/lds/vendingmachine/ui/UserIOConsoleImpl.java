@@ -25,17 +25,17 @@ public class UserIOConsoleImpl implements UserIO {
     @Override
     public BigDecimal readBigDecimal(String prompt, int scale, RoundingMode r) {
         Scanner s = new Scanner(System.in);
-        System.out.print(prompt);
-        String num = s.nextLine();
-        do {
+        while (true) {
             try {
+                System.out.print(prompt);
+                String num = s.nextLine();
                 BigDecimal bD = new BigDecimal(num);
                 bD = bD.setScale(scale, r);
                 return bD;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input");
             }
-        } while (true);
+        } 
     }
 
     @Override
@@ -91,16 +91,16 @@ public class UserIOConsoleImpl implements UserIO {
     @Override
     public int readInt(String prompt) {
         Scanner s = new Scanner(System.in);
-        System.out.print(prompt);
-        String num = s.nextLine();
-        do {
+        while (true) {
             try {
+                System.out.print(prompt);
+                String num = s.nextLine();
                 int integer = Integer.parseInt(num);
                 return integer;
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input");
             }
-        } while (true);
+        } 
     }
 
     //MAKE SURE THE TRY/CATCH BLOCK WORKS (esp the boolean variable)
@@ -109,7 +109,7 @@ public class UserIOConsoleImpl implements UserIO {
         Scanner s = new Scanner(System.in);
         boolean valid = false;
         int integer = 0;
-        do {
+        while(true) {
             System.out.print(prompt);
             String num = s.nextLine();
             while (!valid) {
@@ -125,17 +125,17 @@ public class UserIOConsoleImpl implements UserIO {
             } else {
                 return integer;
             }
-        } while (true);
+        } 
     }
 
     @Override
     public long readLong(String prompt) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public long readLong(String prompt, long min, long max) {
-        throw new UnsupportedOperationException("Not supported yet."); 
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -153,16 +153,16 @@ public class UserIOConsoleImpl implements UserIO {
     @Override
     public LocalDate readLocalDate(String prompt) {
         Scanner s = new Scanner(System.in);
-        System.out.print(prompt);
-        String date = s.nextLine();
-        do {
+        while (true) {
             try {
+                System.out.print(prompt);
+                String date = s.nextLine();
                 LocalDate ld = LocalDate.parse(date);
                 return ld;
             } catch (DateTimeParseException e) {
                 System.out.println("Invalid date");
             }
-        } while (true);
+        } 
     }
 
 }

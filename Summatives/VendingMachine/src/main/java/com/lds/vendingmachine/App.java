@@ -22,6 +22,7 @@ import com.lds.vendingmachine.ui.VendingMachineView;
  */
 public class App {
     public static void main(String[] args) {
+        
         UserIO myIo = new UserIOConsoleImpl();
         VendingMachineView myView = new VendingMachineView(myIo);
         VendingMachineDao myDao = new VendingMachineDaoFileImpl();
