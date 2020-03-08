@@ -5,6 +5,7 @@
  */
 package com.lds.vendingmachine.service;
 
+import com.lds.vendingmachine.dao.VendingMachinePersistenceException;
 import com.lds.vendingmachine.dto.FoodItem;
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,9 +16,21 @@ import java.util.List;
  */
 public interface VendingMachineServiceLayer {
     
-    List<FoodItem> getAllItems();
+    List<FoodItem> getAllItems() throws 
+            VendingMachinePersistenceException;
     
-    FoodItem getFoodItem(String letter);
+    FoodItem getFoodItem(String letter) throws 
+            VendingMachinePersistenceException, 
+            NoItemInInventoryException,
+            InvalidChoiceException;
+    
+    void subtractQtyAndLog(FoodItem foodItem) throws 
+            VendingMachinePersistenceException;
+    
+    void enoughMoney(BigDecimal money, BigDecimal price) throws
+            InsufficientFundsException;
     
     Change makeChange(BigDecimal money);
+    
+    int[] returnChange(BigDecimal money);
 }

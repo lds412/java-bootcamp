@@ -25,57 +25,59 @@ public class VendingMachineView {
     public void displayFoodItems(List<FoodItem> foodList) {
         io.print("=====Vending Machine=====");
         for (FoodItem currentItem : foodList) {
-            io.print(currentItem.getFoodLetter() + ". "
-                    + currentItem.getFoodName() + ": $"
-                    + currentItem.getFoodPrice());
+            if (currentItem.getFoodQty() > 0) {
+                io.print(currentItem.getFoodLetter() + ". "
+                        + currentItem.getFoodName() + ": $"
+                        + currentItem.getFoodPrice());
+            } else{
+                io.print(currentItem.getFoodLetter() + ". [OUT OF STOCK]");
+            }
         }
     }
 
     public String askExitOrContinue(BigDecimal money) {
-        io.print("\nCurrent balance: $"+money);
-        io.print("\nPress q to quit (your current balance will be refunded)");
-        return io.readString("Press any other key to continue. ");
+        io.print("\nCurrent balance: $" + money);
+        io.print("\nEnter q to quit (your current balance will be refunded)");
+        return io.readString("Or hit enter to continue. ");
     }
 
     public BigDecimal getMoney() {
-        //io.print("Current balance: $"+money);
-        return io.readBigDecimal("\nEnter additional cash: ", 2, RoundingMode.HALF_UP);
+        io.print("\nEnter additional cash if necessary, 0 otherwise.");
+        return io.readBigDecimal("Additional cash: ", 2, RoundingMode.HALF_UP);
     }
 
     public String getSelection(BigDecimal money) {
-        io.print("Current balance: $"+money);
+        io.print("Current balance: $" + money);
         return io.readString("\nPlease select from the options above: ");
     }
-    
+
     public void displayFoodItem(FoodItem foodItem, BigDecimal money) {
-        io.print("You chose: "+ foodItem.getFoodName()+"");
-        io.print("Amount left: "+foodItem.getFoodQty());
-        //io.print("Current balance: $"+money+"\n");
+        io.print("You chose: " + foodItem.getFoodName() + "");
     }
     
-    public void displayNotEnoughMoneyMessage(){
-        io.print("\nInsufficient funds\n");
-        //io.print("Current balance: $"+money+"\n");
-    }
-    
-    public void depositChange(int q, int d, int n, int p){
+    public void depositChange(int q, int d, int n, int p) {
         io.print("Please collect your change: ");
-        if(q > 0){
+        if (q > 0) {
             io.print(q + " quarters");
         }
-        if(d > 0){
+        if (d > 0) {
             io.print(d + " dimes");
         }
-        if(n > 0){
-            io.print(n + " nickels");
+        if (n > 0) {
+            io.print(n + " nickel");
         }
-        if(p > 0){
+        if (p > 0) {
             io.print(p + " pennies");
         }
         io.print("");
     }
-    
+
     public void displayExitMessage() {
         io.print("\nGood Bye!!!");
+    }
+    
+    public void displayErrorMessage(String errorMsg) {
+        io.print("\n==== ERROR ====");
+        io.print(errorMsg+"\n");
     }
 }

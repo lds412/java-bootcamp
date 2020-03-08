@@ -18,9 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  *
@@ -33,40 +30,30 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
 
     private Map<String, FoodItem> items = new HashMap<>();
 
-    @Override //Eventually get rid of try-catch
-    public List<FoodItem> getAllFoodItems() {
-        try {
-            loadFoodItems();
-        } catch (FileNotFoundException ex) {
-            
-        }
-        //return new ArrayList<FoodItem>(items.values());
-        return items.values()
-                .stream()
-                .filter(f -> f.getFoodQty() > 0)
-                .collect(Collectors.toList());
+    @Override 
+    public List<FoodItem> getAllFoodItems() 
+            throws VendingMachinePersistenceException{
+        
+        loadFoodItems();
+        return new ArrayList<FoodItem>(items.values());
     }
 
-    @Override //Eventually get rid of try-catch
-    public FoodItem getFoodItem(String letter) {
-        try {
-            loadFoodItems();
-        } catch (FileNotFoundException ex) {
-            System.out.println("File Not Found");
-        }
+    @Override 
+    public FoodItem getFoodItem(String letter) throws 
+            VendingMachinePersistenceException {
+        
+        loadFoodItems();
         FoodItem item = items.get(letter.toUpperCase());
-        int amt = item.getFoodQty();
-        //if(amt > 0){
-            item.setFoodQty(amt - 1);
-        try {
-            writeItems();
-        } catch (IOException ex) {
-            System.out.println("IO Exception");
-        }
-            return item;
-        //} else{
-        //    return null;
-        //}
+        return item;
+    }
+
+    @Override
+    public void subtractQty(FoodItem foodItem) throws 
+            VendingMachinePersistenceException{
+        
+        int amt = foodItem.getFoodQty();
+        foodItem.setFoodQty(amt - 1);
+        writeItems();
     }
 
     private FoodItem unmarshallFood(String itemAsText) {
@@ -82,26 +69,25 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
         return itemFromFile;
     }
 
-    //EXCEPTION??? (remember try-catch
-    private void loadFoodItems() throws FileNotFoundException{
+    private void loadFoodItems() throws VendingMachinePersistenceException {
+        
         Scanner s;
 
-        s = new Scanner(new BufferedReader(new FileReader(FOOD_FILE)));
+        try {
+            s = new Scanner(new BufferedReader(new FileReader(FOOD_FILE)));
+        } catch (FileNotFoundException e) {
+            throw new VendingMachinePersistenceException("-_- Could not load"
+                    + " vending machine data into memory.", e);
+        }
 
         String currentLine;
         FoodItem currentItem;
 
         while (s.hasNextLine()) {
-            // get the next line in the file
             currentLine = s.nextLine();
-            // unmarshall the line into a Student
             currentItem = unmarshallFood(currentLine);
-
-            // We are going to use the title as the map key for our dvd object.
-            // Put currentDvd into the map using title as the key
             items.put(currentItem.getFoodLetter().toUpperCase(), currentItem);
         }
-        // close scanner
         s.close();
     }
 
@@ -111,19 +97,20 @@ public class VendingMachineDaoFileImpl implements VendingMachineDao {
         foodAsText += anItem.getFoodName() + DELIMITER;
         foodAsText += anItem.getFoodPrice() + DELIMITER;
         foodAsText += anItem.getFoodQty();
-        
+
         return foodAsText;
     }
 
-    /**
-     * Writes all items in library out to a FOOD_FILE. See loadItems for file
-     * format.
-     *
-     */
-    private void writeItems() throws IOException {
+    private void writeItems() throws VendingMachinePersistenceException {
+        
         PrintWriter out;
 
-        out = new PrintWriter(new FileWriter(FOOD_FILE));
+        try {
+            out = new PrintWriter(new FileWriter(FOOD_FILE));
+        } catch (IOException e) {
+            throw new VendingMachinePersistenceException("Could not save "
+                    + "vending machine data.", e);
+        }
 
         String foodAsText;
         List<FoodItem> foodList = this.getAllFoodItems();
