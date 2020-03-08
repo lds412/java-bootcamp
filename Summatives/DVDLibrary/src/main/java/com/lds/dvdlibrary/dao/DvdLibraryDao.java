@@ -84,7 +84,7 @@ public interface DvdLibraryDao {
 
     Map<Long, List<Dvd>> getAllDvdsGroupedByAge() throws DvdLibraryDaoException;
 
-    Optional<Dvd> getNewestDvd() throws DvdLibraryDaoException;
+    Dvd getNewestDvd() throws DvdLibraryDaoException;
 
-    Optional<Dvd> getOldestDvd() throws DvdLibraryDaoException;
+    Dvd getOldestDvd() throws DvdLibraryDaoException;
 }

@@ -11,6 +11,7 @@ import com.lds.dvdlibrary.dao.DvdLibraryDao;
 import com.lds.dvdlibrary.dto.Dvd;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -66,8 +67,10 @@ public class DvdLibraryController {
                         getAvgAge();
                         break;
                     case "11":
+                        getNewestDvd();
                         break;
                     case "12":
+                        getOldestDvd();
                         break;
                     case "13":
                         keepGoing = false;
@@ -187,10 +190,10 @@ public class DvdLibraryController {
         view.displayDvdList(dvdList);
     }
     
-    //FINISH THIS 
     private void getDvdsByDirector() throws DvdLibraryDaoException{
         String director = view.askForDirector();
         Map<String, List<Dvd>> dvdMap = dao.getDvdsByDirector(director);
+        view.printDvdsByDirector(dvdMap);
     }
     
     private void getDvdsByStudio() throws DvdLibraryDaoException{
@@ -202,6 +205,18 @@ public class DvdLibraryController {
     private void getAvgAge() throws DvdLibraryDaoException{
         double age = dao.getAverageDvdAge();
         view.printAvgAge(age);
+        view.displayContinueMessage();
+    }
+    
+    private void getNewestDvd() throws DvdLibraryDaoException{
+        Dvd newest = dao.getNewestDvd();
+        view.displayDvd(newest);
+        view.displayContinueMessage();
+    }
+    
+    private void getOldestDvd() throws DvdLibraryDaoException{
+        Dvd oldest = dao.getOldestDvd();
+        view.displayDvd(oldest);
         view.displayContinueMessage();
     }
     

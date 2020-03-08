@@ -18,7 +18,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -125,7 +125,7 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
     }
 
     @Override
-    public Optional<Dvd> getNewestDvd() throws DvdLibraryDaoException {
+    public Dvd getNewestDvd() throws DvdLibraryDaoException {
         loadDvds();
         //Map<Long, List<Dvd>> mapByAge = getAllDvdsGroupByAge();
         //Set<Long> ages = mapByAge.keySet();
@@ -133,15 +133,17 @@ public class DvdLibraryDaoFileImpl implements DvdLibraryDao {
         //return mapByAge.get(minAge);
         return dvds.values()
                 .stream()
-                .min(Comparator.comparing(Dvd::getDvdAge));
+                .min(Comparator.comparing(Dvd::getDvdAge))
+                .orElseThrow(NoSuchElementException::new);
     }
 
     @Override
-    public Optional<Dvd> getOldestDvd() throws DvdLibraryDaoException {
+    public Dvd getOldestDvd() throws DvdLibraryDaoException {
         loadDvds();
         return dvds.values()
-                .stream()
-                .max(Comparator.comparing(Dvd::getDvdAge));
+                        .stream()
+                        .max(Comparator.comparing(Dvd::getDvdAge))
+                        .orElseThrow(NoSuchElementException::new);
     }
 
     private Dvd unmarshallDvd(String dvdAsText) {

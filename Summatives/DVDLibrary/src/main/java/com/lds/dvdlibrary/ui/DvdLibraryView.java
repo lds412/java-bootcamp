@@ -9,6 +9,8 @@ import com.lds.dvdlibrary.dto.Dvd;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -144,6 +146,15 @@ public class DvdLibraryView {
         io.readString("\n\tPress enter to continue. ");
     }
 
+    public void printDvdsByDirector(Map<String, List<Dvd>> dvdMap){
+        Set<String> ratings = dvdMap.keySet();
+        ratings.stream()
+                .forEach(mpaa -> {System.out.println("====================");
+                System.out.println("Rating: "+mpaa);
+                dvdMap.get(mpaa).stream().forEach(m -> System.out.println(m.getTitle()));
+                });
+    }
+    
     public void displayDvd(Dvd dvd) {
         if (dvd != null) {
             io.print("\n\t" + dvd.getTitle() + ", " + dvd.getReleaseDate()
