@@ -7,7 +7,6 @@ package com.lds.vendingmachine.controller;
 
 import com.lds.vendingmachine.dao.VendingMachinePersistenceException;
 import com.lds.vendingmachine.dto.FoodItem;
-import com.lds.vendingmachine.service.Change;
 import com.lds.vendingmachine.service.InsufficientFundsException;
 import com.lds.vendingmachine.service.InvalidChoiceException;
 import com.lds.vendingmachine.service.NoItemInInventoryException;
@@ -47,9 +46,9 @@ public class VendingMachineController {
                         exit = true;
 
                     } else {
-                        money = money.add(view.getMoney());
-                        String menuSelection = view.getSelection(money);
                         try {
+                            money = money.add(view.getMoney());
+                            String menuSelection = view.getSelection(money);
                             FoodItem foodItem = service.getFoodItem(menuSelection);
                             try {
                                 service.enoughMoney(money, foodItem.getFoodPrice());

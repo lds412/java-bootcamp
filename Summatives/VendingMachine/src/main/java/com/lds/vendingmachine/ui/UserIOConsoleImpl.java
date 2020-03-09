@@ -22,6 +22,7 @@ public class UserIOConsoleImpl implements UserIO {
         System.out.println(message);
     }
 
+    //DOES NOT ACCEPT NUMBERS LESS THAN ZERO
     @Override
     public BigDecimal readBigDecimal(String prompt, int scale, RoundingMode r) {
         Scanner s = new Scanner(System.in);
@@ -31,11 +32,15 @@ public class UserIOConsoleImpl implements UserIO {
                 String num = s.nextLine();
                 BigDecimal bD = new BigDecimal(num);
                 bD = bD.setScale(scale, r);
-                return bD;
+                if (bD.compareTo(BigDecimal.ZERO) >= 0) {
+                    return bD;
+                } else {
+                    System.out.println("Invalid input");
+                }
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input");
             }
-        } 
+        }
     }
 
     @Override
@@ -100,7 +105,7 @@ public class UserIOConsoleImpl implements UserIO {
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input");
             }
-        } 
+        }
     }
 
     //MAKE SURE THE TRY/CATCH BLOCK WORKS (esp the boolean variable)
@@ -109,7 +114,7 @@ public class UserIOConsoleImpl implements UserIO {
         Scanner s = new Scanner(System.in);
         boolean valid = false;
         int integer = 0;
-        while(true) {
+        while (true) {
             System.out.print(prompt);
             String num = s.nextLine();
             while (!valid) {
@@ -125,7 +130,7 @@ public class UserIOConsoleImpl implements UserIO {
             } else {
                 return integer;
             }
-        } 
+        }
     }
 
     @Override
@@ -162,7 +167,7 @@ public class UserIOConsoleImpl implements UserIO {
             } catch (DateTimeParseException e) {
                 System.out.println("Invalid date");
             }
-        } 
+        }
     }
 
 }
