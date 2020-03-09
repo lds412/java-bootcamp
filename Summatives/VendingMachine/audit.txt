@@ -6,3 +6,5 @@
 2020-03-07 06:29:13 : Twix Purchased
 2020-03-07 06:29:29 : Snickers Purchased
 2020-03-07 06:29:44 : Flaming Hot Cheetos Purchased
+2020-03-09 09:41:02 : Cool Ranch Doritos Purchased
+2020-03-09 09:43:23 : Flaming Hot Cheetos Purchased
