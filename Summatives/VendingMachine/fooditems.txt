@@ -1,5 +1,5 @@
 A::Cool Ranch Doritos::1.35::0
-B::Flaming Hot Cheetos::1.30::3
+B::Flaming Hot Cheetos::1.30::2
 C::Salt and Vinegar Chips::1.25::5
 D::Twix::0.85::3
 E::Snickers::0.75::4
