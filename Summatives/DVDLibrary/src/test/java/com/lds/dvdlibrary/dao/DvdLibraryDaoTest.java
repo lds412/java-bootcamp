@@ -50,9 +50,11 @@ public class DvdLibraryDaoTest {
 
     /**
      * Test of addDvd method, of class DvdLibraryDao.
+     * @throws java.lang.Exception
      */
     @Test
     public void testAddGetDvd() throws Exception {
+        setUp(); //BeforeEach not working
         Dvd dvd = new Dvd("Something");
         dvd.setReleaseDate(ld);
         dvd.setDirector("Someone");
@@ -69,9 +71,11 @@ public class DvdLibraryDaoTest {
 
     /**
      * Test of removeDvd method, of class DvdLibraryDao.
+     * @throws java.lang.Exception
      */
     @Test
     public void testRemoveDvd() throws Exception {
+        setUp(); //BeforeEach not working
         Dvd dvd1 = new Dvd("Something");
         dvd1.setReleaseDate(ld);
         dvd1.setDirector("Someone");
@@ -101,9 +105,11 @@ public class DvdLibraryDaoTest {
 
     /**
      * Test of saveEdits method, of class DvdLibraryDao.
+     * @throws java.lang.Exception
      */
     @Test
     public void testSaveEdits() throws Exception {
+        setUp(); //BeforeEach not working
         Dvd dvd = new Dvd("Something");
         dvd.setReleaseDate(ld);
         dvd.setDirector("Someone");
@@ -125,9 +131,11 @@ public class DvdLibraryDaoTest {
 
     /**
      * Test of listDvds method, of class DvdLibraryDao.
+     * @throws java.lang.Exception
      */
     @Test
     public void testListDvds() throws Exception {
+        setUp(); //BeforeEach not working
         Dvd dvd1 = new Dvd("Something");
         dvd1.setReleaseDate(ld);
         dvd1.setDirector("Someone");
