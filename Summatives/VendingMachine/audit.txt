@@ -9,3 +9,6 @@
 2020-03-09 09:41:02 : Cool Ranch Doritos Purchased
 2020-03-09 09:43:23 : Flaming Hot Cheetos Purchased
 2020-03-09 02:53:03 : Flaming Hot Cheetos Purchased
+2020-03-13 11:59:56 : Salt and Vinegar Chips Purchased
+2020-03-13 12:00:09 : Snickers Purchased
+2020-03-13 12:16:06 : Flaming Hot Cheetos Purchased
