@@ -148,6 +148,15 @@ public class EyeTunesDaoFileImpl implements EyeTunesDao {
                 .collect(Collectors.groupingBy(Song::getArtistName));
     }
 
+    @Override
+    public boolean checkSongExists(String songTitle) throws EyeTunesDaoException {
+        boolean songExists = false;
+        if (songs.containsKey(songTitle.toUpperCase())) {
+            songExists = true;
+        }
+        return songExists;
+    }
+    
     public void checkArtist(String title) throws EyeTunesDaoException {
         Song aSong = songs.get(title.toUpperCase());
         String artist = aSong.getArtistName();
@@ -157,15 +166,6 @@ public class EyeTunesDaoFileImpl implements EyeTunesDao {
             }
         }
         createNewFile(artist);
-    }
-
-    @Override
-    public boolean checkSongExists(String songTitle) throws EyeTunesDaoException {
-        boolean songExists = false;
-        if (songs.containsKey(songTitle.toUpperCase())) {
-            songExists = true;
-        }
-        return songExists;
     }
     
     public void createNewFile(String artist) throws EyeTunesDaoException {
