@@ -20,15 +20,21 @@ public class FlooringCompanyController {
     FlooringCompanyView view;
     FlooringCompanyServiceLayer service;
 
-    public FlooringCompanyController(FlooringCompanyServiceLayer service, FlooringCompanyView view) {
+    private boolean prod;
+
+    public FlooringCompanyController(FlooringCompanyServiceLayer service, FlooringCompanyView view, boolean prod) {
         this.service = service;
         this.view = view;
+        this.prod = prod;
     }
 
     //Change strings to ints??
     public void run() {
         boolean keepGoing = true;
         String menuSelection;
+
+        displayMode();
+
         service.loadData();
         //try {
         while (keepGoing) {
@@ -49,7 +55,11 @@ public class FlooringCompanyController {
                     removeOrder();
                     break;
                 case "5":
-                    service.saveEdits();
+                    if (prod) {
+                        saveChanges();
+                    } else{
+                        view.displayCommandUnsuccessful();
+                    }
                     break;
                 case "6":
                     keepGoing = false;
@@ -58,13 +68,23 @@ public class FlooringCompanyController {
                     view.displayUnknownCommand();
             }
         }
-        if(view.offerToSave()){
-            service.saveEdits();
+        if (prod) {
+            if (view.offerToSave()) {
+                saveChanges();
+            }
         }
         view.displayExitMessage();
 //        } catch (DvdLibraryDaoException e) {
 //            view.displayErrorMessage(e.getMessage());
 //        }
+    }
+
+    private void displayMode() {
+        if (prod) {
+            view.displayProdMode();
+        } else {
+            view.displayTrainingMode();
+        }
     }
 
     private void displayOrders() {
@@ -76,11 +96,11 @@ public class FlooringCompanyController {
     private void addOrder() {
         List<Order> orderList = service.listOrders();
         Order newOrder = view.getNewOrderInfo(orderList);
-        
+
         service.createOrder(newOrder);
-        
+
         view.displayOrder(newOrder);
-        
+
         if (view.confirmCommand("add")) {
             service.addOrder(newOrder.getOrderNum(), newOrder);
             view.displayAddSuccessful();
@@ -113,6 +133,11 @@ public class FlooringCompanyController {
                 view.displayDeleteAborted();
             }
         }
+    }
+    
+    private void saveChanges(){
+        service.saveEdits();
+        view.displaySaveSuccessful();
     }
 
 }

@@ -15,6 +15,7 @@ import java.util.List;
  * @author lydia
  */
 public class FlooringCompanyServiceLayerImpl implements FlooringCompanyServiceLayer{
+    
     FlooringCompanyDao dao;
     
     public FlooringCompanyServiceLayerImpl(FlooringCompanyDao dao){

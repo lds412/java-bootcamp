@@ -50,8 +50,10 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
 
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MMddyyyy");
 
-    public ArrayList<String> fileNames = new ArrayList<>();
-    //public Set<String> fileNames = new HashSet<>();
+        
+    //Consider moving memory to serviceLayer
+    
+    public Set<String> fileNames = new HashSet<>();
 
     private Map<String, BigDecimal> taxRates = new HashMap<>();
     private Map<String, BigDecimal> productRates = new HashMap<>();
@@ -83,7 +85,9 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
     @Override
     public Order addOrder(int orderNum, Order order) {
         orders.put(orderNum, order);
-        checkDate(order);
+        LocalDate date = order.getOrderDate();
+        String fileName = PREFIX + date.format(FORMATTER);
+        fileNames.add(fileName);
         return order;
     }
 
@@ -99,7 +103,8 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
     }
 
     @Override
-    public void saveEdits() {
+    public void saveEdits() { //DO NOT CALL THIS IN TRAINING MODE!
+        writeFileNames();
         writeOrders();
     }
 
@@ -242,47 +247,33 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
 
             //Skip the first line
             s.nextLine();
-            
+
             //MAY CHANGE hasNextLine()
             while (s.hasNextLine()) {
                 currentLine = s.nextLine();
                 currentOrder = unmarshallOrder(currentLine, currentFile);
                 orders.put(currentOrder.getOrderNum(), currentOrder);
             }
-            //May want to move it down one bracket
+            //May want to move it down one bracket?
             s.close();
         }
     }
 
-    public void checkDate(Order order) {
-        LocalDate date = order.getOrderDate();
-        String fileName = PREFIX + date.format(FORMATTER);
-        for (String currentFile : fileNames) {
-            if (fileName.equalsIgnoreCase(currentFile)) {
-                break;
-            }
-        }
-        System.out.println("We are about to add another file to the list"); //This did not execute
-        fileNames.add(fileName); //THIS SEEMS TO BE EXECUTING EVERY TIME???
-        createNewFile(fileName); //THIS COULD BE CALLED IN WRITE FILE
-    }
-
-    public void createNewFile(String fileName) {
-        File file = new File(PATH + fileName + FILE_TYPE);
-
-        //THIS method could be split in two starting here!!!!!!!!!!!
+    public void writeFileNames() {
+        
         PrintWriter out = null;
 
         try {
-            out = new PrintWriter(new FileWriter(DATE_FILE, true));
+            out = new PrintWriter(new FileWriter(DATE_FILE));
+            for (String currentFile : fileNames) {
+                System.out.println(currentFile);
+                out.println(currentFile);
+                out.flush();
+            }
         } catch (IOException e) {
 //            throw new EyeTunesDaoException(
 //                    "Could not save artist data.", e);
         }
-
-        System.out.println("A new file was just created");
-        out.println(fileName);
-        out.flush();
         out.close();
     }
 
@@ -305,14 +296,14 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
     }
 
     private void writeOrders() {
+        
         PrintWriter out = null;
 
-        //COULD CREATE NEW FILES HERE
-        //Also note we are not appending but rewriting files every time??
         for (String currentFile : fileNames) {
             try {
                 out = new PrintWriter(new FileWriter(currentFile + FILE_TYPE));
             } catch (IOException e) {
+                File file = new File(PATH + currentFile + FILE_TYPE);
 //                throw new EyeTunesDaoException(
 //                        "Could not save song data.", e);
             }
@@ -321,7 +312,7 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
 
             String orderAsText;
             LocalDate currentDate = LocalDate.parse(currentFile.substring(7), FORMATTER);
-            
+
             List<Order> orderList = listOrdersForDate(currentDate);
 
             for (Order currentOrder : orderList) {

@@ -1,4 +1,4 @@
 OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total
 2,  Smith,  MI,  5.75,  Tile,  55.00,  2.25,  2.10,  123.75,  115.50,  13.76,  253.01
-3,  Rose,  OH,  6.25,  Wood,  75.00,  5.15,  4.75,  386.25,  356.25,  46.41,  788.91
+3,  Rose,  IN,  6.25,  Wood,  75.00,  5.15,  4.75,  386.25,  356.25,  46.41,  788.91
 4,  Elliot,  PA,  6.75,  Carpet,  200.00,  5.15,  4.75,  1030.00,  950.00,  133.65,  2113.65

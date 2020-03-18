@@ -13,6 +13,8 @@ import com.lds.flooringcompany.service.FlooringCompanyServiceLayerImpl;
 import com.lds.flooringcompany.ui.FlooringCompanyView;
 import com.lds.flooringcompany.ui.UserIO;
 import com.lds.flooringcompany.ui.UserIOConsoleImpl;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 /**
  *
@@ -21,13 +23,16 @@ import com.lds.flooringcompany.ui.UserIOConsoleImpl;
 public class App {
 
     public static void main(String[] args) {
-        UserIO myIo = new UserIOConsoleImpl();
-        FlooringCompanyView myView = new FlooringCompanyView(myIo);
-        FlooringCompanyDao myDao = new FlooringCompanyDaoFileImpl();
-        FlooringCompanyServiceLayer myService = new FlooringCompanyServiceLayerImpl(myDao);
-        FlooringCompanyController controller = new FlooringCompanyController(myService, myView);
+//        UserIO myIo = new UserIOConsoleImpl();
+//        FlooringCompanyView myView = new FlooringCompanyView(myIo);
+//        FlooringCompanyDao myDao = new FlooringCompanyDaoFileImpl();
+//        FlooringCompanyServiceLayer myService = new FlooringCompanyServiceLayerImpl(myDao);
+//        FlooringCompanyController controller = new FlooringCompanyController(myService, myView);
 
+        ApplicationContext ctx
+                = new ClassPathXmlApplicationContext("applicationContext.xml");
+        FlooringCompanyController controller
+                = ctx.getBean("controller", FlooringCompanyController.class);
         controller.run();
-       
     }
 }

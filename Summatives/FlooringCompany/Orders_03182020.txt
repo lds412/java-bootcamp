@@ -1,0 +1,7 @@
+OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total
+5,  Jones,  MI,  5.75,  Tile,  90.00,  3.50,  4.15,  315.00,  373.50,  39.59,  728.09
+6,  Brown,  PA,  6.75,  Wood,  50.00,  5.15,  4.75,  257.50,  237.50,  33.41,  528.41
+7,  Hardy,  IN,  6.00,  Laminate,  200.00,  1.75,  2.10,  350.00,  420.00,  46.20,  816.20
+8,  Test1,  MI,  5.75,  Tile,  200.00,  3.50,  4.15,  700.00,  830.00,  87.98,  1617.98
+9,  Test2,  OH,  6.25,  Wood,  140.00,  5.15,  4.75,  721.00,  665.00,  86.63,  1472.63
+10,  Test3,  OH,  6.25,  Carpet,  50.00,  2.25,  2.10,  112.50,  105.00,  13.59,  231.09

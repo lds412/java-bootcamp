@@ -24,6 +24,25 @@ public class FlooringCompanyView {
         this.io = io;
     }
 
+    public void displayTrainingMode() {
+        io.print("    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
+        io.print("* * * *");
+        io.print("    *  TRAINING MODE");
+        io.print("    * Any new or modified data will NOT be saved upon exiting the program.");
+        io.print("    *");
+    }
+
+    public void displayProdMode() {
+        io.print("    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
+        io.print("* * * *");
+        io.print("    *  PROD MODE");
+        io.print("    * Any new or modified data that has been saved will persist "
+                + "upon exiting the program.");
+        io.print("    *");
+        io.print("    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
+        io.print("* * * *");
+    }
+
     public String printMenuAndGetSelection() {
         io.print("    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
         io.print("* * * *");
@@ -182,6 +201,14 @@ public class FlooringCompanyView {
         io.print("\nOrder removed.\n");
     }
 
+    public void displaySaveSuccessful() {
+        io.print("\nYour changes have been saved.\n");
+    }
+
+    public void displayCommandUnsuccessful() {
+        io.print("\nUnfortunately that command cannot be completed at this time.\n");
+    }
+    
     public void displayUnknownCommand() {
         io.print("\nUnknown Command!!!\n");
     }
