@@ -6,13 +6,7 @@
 package com.lds.flooringcompany;
 
 import com.lds.flooringcompany.controller.FlooringCompanyController;
-import com.lds.flooringcompany.dao.FlooringCompanyDao;
-import com.lds.flooringcompany.dao.FlooringCompanyDaoFileImpl;
-import com.lds.flooringcompany.service.FlooringCompanyServiceLayer;
-import com.lds.flooringcompany.service.FlooringCompanyServiceLayerImpl;
-import com.lds.flooringcompany.ui.FlooringCompanyView;
-import com.lds.flooringcompany.ui.UserIO;
-import com.lds.flooringcompany.ui.UserIOConsoleImpl;
+import com.lds.flooringcompany.service.DateDiscrepencyException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -22,12 +16,8 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class App {
 
-    public static void main(String[] args) {
-//        UserIO myIo = new UserIOConsoleImpl();
-//        FlooringCompanyView myView = new FlooringCompanyView(myIo);
-//        FlooringCompanyDao myDao = new FlooringCompanyDaoFileImpl();
-//        FlooringCompanyServiceLayer myService = new FlooringCompanyServiceLayerImpl(myDao);
-//        FlooringCompanyController controller = new FlooringCompanyController(myService, myView);
+    //THROWS EXCEPTION???????????
+    public static void main(String[] args) throws DateDiscrepencyException {
 
         ApplicationContext ctx
                 = new ClassPathXmlApplicationContext("applicationContext.xml");

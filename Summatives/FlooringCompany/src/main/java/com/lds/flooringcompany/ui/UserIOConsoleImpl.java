@@ -23,7 +23,7 @@ public class UserIOConsoleImpl implements UserIO {
         System.out.println(message);
     }
 
-    //DOES NOT ACCEPT NUMBERS LESS THAN ZERO
+    //DOES NOT ACCEPT NUMBERS LESS THAN OR EQUAL TO ZERO
     @Override
     public BigDecimal readBigDecimal(String prompt, int scale, RoundingMode r) {
         Scanner s = new Scanner(System.in);
@@ -33,7 +33,7 @@ public class UserIOConsoleImpl implements UserIO {
                 String num = s.nextLine();
                 BigDecimal bD = new BigDecimal(num);
                 bD = bD.setScale(scale, r);
-                if (bD.compareTo(BigDecimal.ZERO) >= 0) {
+                if (bD.compareTo(BigDecimal.ZERO) > 0) {
                     return bD;
                 } else {
                     System.out.println("Invalid input");
@@ -149,7 +149,7 @@ public class UserIOConsoleImpl implements UserIO {
         Scanner s = new Scanner(System.in);
         System.out.print(prompt);
         String ans = s.nextLine();
-        if (ans.equals("")) {
+        if (ans.trim().equals("")) {
             return "N/A";
         } else {
             return ans;

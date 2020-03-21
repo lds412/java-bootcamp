@@ -5,8 +5,14 @@
  */
 package com.lds.flooringcompany.controller;
 
+import com.lds.flooringcompany.dao.FlooringCompanyFileNotFoundException;
+import com.lds.flooringcompany.dao.FlooringCompanyPersistenceException;
+import com.lds.flooringcompany.dto.DelimiterInclusionException;
 import com.lds.flooringcompany.dto.Order;
+import com.lds.flooringcompany.service.DateDiscrepencyException;
 import com.lds.flooringcompany.service.FlooringCompanyServiceLayer;
+import com.lds.flooringcompany.service.InvalidChoiceException;
+import com.lds.flooringcompany.service.RequiredDataException;
 import com.lds.flooringcompany.ui.FlooringCompanyView;
 import java.time.LocalDate;
 import java.util.List;
@@ -28,55 +34,55 @@ public class FlooringCompanyController {
         this.prod = prod;
     }
 
-    //Change strings to ints??
-    public void run() {
+    public void run() throws DateDiscrepencyException {
         boolean keepGoing = true;
         String menuSelection;
 
         displayMode();
 
-        service.loadData();
-        //try {
-        while (keepGoing) {
+        try {
+            service.loadData();
 
-            menuSelection = view.printMenuAndGetSelection();
+            while (keepGoing) {
 
-            switch (menuSelection) {
-                case "1":
-                    displayOrders();
-                    break;
-                case "2":
-                    addOrder();
-                    break;
-                case "3":
-                    editOrder();
-                    break;
-                case "4":
-                    removeOrder();
-                    break;
-                case "5":
-                    if (prod) {
-                        saveChanges();
-                    } else{
-                        view.displayCommandUnsuccessful();
-                    }
-                    break;
-                case "6":
-                    keepGoing = false;
-                    break;
-                default:
-                    view.displayUnknownCommand();
+                menuSelection = view.printMenuAndGetSelection();
+
+                switch (menuSelection) {
+                    case "1":
+                        displayOrders();
+                        break;
+                    case "2":
+                        addOrder();
+                        break;
+                    case "3":
+                        editOrder();
+                        break;
+                    case "4":
+                        removeOrder();
+                        break;
+                    case "5":
+                        if (prod) {
+                            saveChanges();
+                        } else {
+                            view.displayCommandUnsuccessful();
+                        }
+                        break;
+                    case "6":
+                        keepGoing = false;
+                        break;
+                    default:
+                        view.displayUnknownCommand();
+                }
             }
-        }
-        if (prod) {
-            if (view.offerToSave()) {
-                saveChanges();
+            if (prod) {
+                if (view.offerToSave()) {
+                    saveChanges();
+                }
             }
+            view.displayExitMessage();
+        } catch (FlooringCompanyFileNotFoundException e) {
+            view.displayErrorMessage(e.getMessage());
         }
-        view.displayExitMessage();
-//        } catch (DvdLibraryDaoException e) {
-//            view.displayErrorMessage(e.getMessage());
-//        }
     }
 
     private void displayMode() {
@@ -88,56 +94,78 @@ public class FlooringCompanyController {
     }
 
     private void displayOrders() {
-        LocalDate date = view.getDate();
-        List<Order> orderList = service.listOrdersForDate(date);
-        view.displayOrderList(orderList);
-    }
-
-    private void addOrder() {
-        List<Order> orderList = service.listOrders();
-        Order newOrder = view.getNewOrderInfo(orderList);
-
-        service.createOrder(newOrder);
-
-        view.displayOrder(newOrder);
-
-        if (view.confirmCommand("add")) {
-            service.addOrder(newOrder.getOrderNum(), newOrder);
-            view.displayAddSuccessful();
-        } else {
-            view.displayAddAborted();
+        try {
+            LocalDate date = view.getDate();
+            List<Order> orderList = service.listOrdersForDate(date);
+            view.displayOrderList(orderList);
+        } catch (InvalidChoiceException e) {
+            view.displayErrorMessage(e.getMessage());
         }
     }
 
+    private void addOrder() {
+
+        try {
+            List<Order> orderList = service.listOrders();
+            Order newOrder = view.getNewOrderInfo(orderList);
+
+            service.validateOrder(newOrder);
+
+            view.displayOrder(newOrder);
+
+            if (view.confirmCommand("add")) {
+                service.addOrder(newOrder.getOrderNum(), newOrder);
+                view.displayAddSuccessful();
+            } else {
+                view.displayAddAborted();
+            }
+        } catch (RequiredDataException | InvalidChoiceException | DelimiterInclusionException e) {
+            view.displayErrorMessage(e.getMessage());
+        }
+
+    }
+
     private void editOrder() {
-        LocalDate date = view.getDate();
-        int orderNum = view.getOrderNum();
-        Order order = service.getOrder(date, orderNum);
-        view.editOrder(order);
+        try {
+            LocalDate date = view.getDate();
+            int orderNum = view.getOrderNum();
+            Order order = service.getOrder(date, orderNum);
+            Order editedOrder = view.editOrder(order);
+            service.validateOrder(editedOrder);
+            service.editOrder(editedOrder, order);
+            view.displayEditSuccessful();
+        } catch (InvalidChoiceException | DateDiscrepencyException | 
+                RequiredDataException | DelimiterInclusionException e) {
+            view.displayErrorMessage(e.getMessage());
+        }
     }
 
     private void removeOrder() {
 
-        LocalDate date = view.getDate();
-        int orderNum = view.getOrderNum();
-        Order order = service.getOrder(date, orderNum);
-        view.displayOrder(order);
+        try {
+            LocalDate date = view.getDate();
+            int orderNum = view.getOrderNum();
+            Order order = service.getOrder(date, orderNum);
+            view.displayOrder(order);
 
-        if (order == null) {
-            //view.displayContinueMessage();
-        } else {
             if (view.confirmCommand("delete")) {
                 service.removeOrder(date, orderNum);
                 view.displayRemoveSuccessful();
             } else {
                 view.displayDeleteAborted();
             }
+        } catch (InvalidChoiceException | DateDiscrepencyException e) {
+            view.displayErrorMessage(e.getMessage());
         }
     }
-    
-    private void saveChanges(){
-        service.saveEdits();
-        view.displaySaveSuccessful();
+
+    private void saveChanges() {
+        try {
+            service.saveEdits();
+            view.displaySaveSuccessful();
+        } catch (FlooringCompanyPersistenceException e) {
+            view.displayErrorMessage(e.getMessage());
+        }
     }
 
 }

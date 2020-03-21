@@ -5,6 +5,7 @@
  */
 package com.lds.flooringcompany.dao;
 
+import com.lds.flooringcompany.dto.DelimiterInclusionException;
 import com.lds.flooringcompany.dto.Order;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -16,7 +17,8 @@ import java.util.List;
  */
 public interface FlooringCompanyDao {
     
-    public void loadData();
+    public void loadData() 
+            throws FlooringCompanyFileNotFoundException, DelimiterInclusionException;
     
     public List<Order> listOrders();
     
@@ -24,11 +26,11 @@ public interface FlooringCompanyDao {
     
     public Order addOrder(int orderNum, Order order);
     
-    public Order getOrder(LocalDate date, int orderNum);
+    public Order getOrder(int orderNum);
     
-    public Order removeOrder(LocalDate date, int orderNum);
+    public Order removeOrder(int orderNum);
     
-    public void saveEdits();
+    public void saveEdits() throws FlooringCompanyPersistenceException;
     
     public BigDecimal getTaxRate(String state);
     

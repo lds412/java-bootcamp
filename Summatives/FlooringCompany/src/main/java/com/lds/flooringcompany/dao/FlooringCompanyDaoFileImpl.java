@@ -5,6 +5,7 @@
  */
 package com.lds.flooringcompany.dao;
 
+import com.lds.flooringcompany.dto.DelimiterInclusionException;
 import com.lds.flooringcompany.dto.Order;
 import java.io.BufferedReader;
 import java.io.File;
@@ -31,9 +32,6 @@ import java.util.stream.Collectors;
  */
 public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
 
-    public static final String PATH
-            = "C:/Users/lydia/Documents/repos/java-mpls-0220-lds412/Summatives/FlooringCompany";
-
     public static final String HEADER = "OrderNumber, CustomerName, State, "
             + "TaxRate, ProductType, Area, CostPerSquareFoot, "
             + "LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total";
@@ -50,9 +48,6 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
 
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MMddyyyy");
 
-        
-    //Consider moving memory to serviceLayer
-    
     public Set<String> fileNames = new HashSet<>();
 
     private Map<String, BigDecimal> taxRates = new HashMap<>();
@@ -62,7 +57,8 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
     private Map<Integer, Order> orders = new HashMap<>();
 
     @Override
-    public void loadData() {
+    public void loadData() 
+            throws FlooringCompanyFileNotFoundException, DelimiterInclusionException {
         loadTaxes();
         loadProducts();
         loadFileNames();
@@ -92,18 +88,18 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
     }
 
     @Override
-    public Order getOrder(LocalDate date, int orderNum) {
+    public Order getOrder(int orderNum) {
         return orders.get(orderNum);
     }
 
     @Override
-    public Order removeOrder(LocalDate date, int orderNum) {
+    public Order removeOrder(int orderNum) {
         Order removedOrder = orders.remove(orderNum);
         return removedOrder;
     }
 
     @Override
-    public void saveEdits() { //DO NOT CALL THIS IN TRAINING MODE!
+    public void saveEdits() throws FlooringCompanyPersistenceException {
         writeFileNames();
         writeOrders();
     }
@@ -130,14 +126,14 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
         taxRates.put(state.toUpperCase(), taxRate);
     }
 
-    private void loadFileNames() {
+    private void loadFileNames() throws FlooringCompanyFileNotFoundException {
         Scanner s = null;
 
         try {
             s = new Scanner(new BufferedReader(new FileReader(DATE_FILE)));
         } catch (FileNotFoundException e) {
-//            throw new EyeTunesDaoException(
-//                    "-_- Could not load artists into memory.", e);
+            throw new FlooringCompanyFileNotFoundException(
+                    "-_- Could not access file names.", e);
         }
 
         while (s.hasNextLine()) {
@@ -147,13 +143,14 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
         s.close();
     }
 
-    private void loadTaxes() {
+    private void loadTaxes() throws FlooringCompanyFileNotFoundException {
         Scanner scanner = null;
 
         try {
             scanner = new Scanner(new BufferedReader(new FileReader(TAX_FILE)));
         } catch (FileNotFoundException e) {
-            //throw new ClassRosterPersistenceException("-_- Could not load roster data into memory.", e);
+            throw new FlooringCompanyFileNotFoundException(
+                    "-_- Could not load tax data into memory.", e);
         }
 
         String currentLine;
@@ -178,13 +175,14 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
         laborRates.put(product.toUpperCase(), laborRate);
     }
 
-    private void loadProducts() {
+    private void loadProducts() throws FlooringCompanyFileNotFoundException {
         Scanner scanner = null;
 
         try {
             scanner = new Scanner(new BufferedReader(new FileReader(PRODUCT_FILE)));
         } catch (FileNotFoundException e) {
-            //throw new ClassRosterPersistenceException("-_- Could not load roster data into memory.", e);
+            throw new FlooringCompanyFileNotFoundException(
+                    "-_- Could not load product data into memory.", e);
         }
 
         String currentLine;
@@ -200,7 +198,8 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
         scanner.close();
     }
 
-    private Order unmarshallOrder(String orderAsText, String fileName) {
+    private Order unmarshallOrder(String orderAsText, String fileName) 
+            throws DelimiterInclusionException {
         String[] orderTokens = orderAsText.split(DELIMITER);
 
         int orderNum = Integer.parseInt(orderTokens[0]);
@@ -230,7 +229,8 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
         return orderFromFile;
     }
 
-    private void loadAllOrders() {
+    private void loadAllOrders() 
+            throws FlooringCompanyFileNotFoundException, DelimiterInclusionException {
         Scanner s = null;
 
         //currentFile must be formatted "Orders_MMddyyyy"
@@ -238,8 +238,8 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
             try {
                 s = new Scanner(new BufferedReader(new FileReader(currentFile + FILE_TYPE)));
             } catch (FileNotFoundException e) {
-//                throw new EyeTunesDaoException(
-//                        "-_- Could not load songs into memory.", e);
+                throw new FlooringCompanyFileNotFoundException(
+                        "-_- Could not load order data into memory.", e);
             }
 
             String currentLine;
@@ -248,31 +248,28 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
             //Skip the first line
             s.nextLine();
 
-            //MAY CHANGE hasNextLine()
             while (s.hasNextLine()) {
                 currentLine = s.nextLine();
                 currentOrder = unmarshallOrder(currentLine, currentFile);
                 orders.put(currentOrder.getOrderNum(), currentOrder);
             }
-            //May want to move it down one bracket?
             s.close();
         }
     }
 
-    public void writeFileNames() {
-        
+    public void writeFileNames() throws FlooringCompanyPersistenceException {
+
         PrintWriter out = null;
 
         try {
             out = new PrintWriter(new FileWriter(DATE_FILE));
             for (String currentFile : fileNames) {
-                System.out.println(currentFile);
                 out.println(currentFile);
                 out.flush();
             }
         } catch (IOException e) {
-//            throw new EyeTunesDaoException(
-//                    "Could not save artist data.", e);
+            throw new FlooringCompanyPersistenceException(
+                    "Could not save access to data.", e);
         }
         out.close();
     }
@@ -295,17 +292,19 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
         return orderAsText;
     }
 
-    private void writeOrders() {
-        
+    private void writeOrders() throws FlooringCompanyPersistenceException {
+
         PrintWriter out = null;
 
         for (String currentFile : fileNames) {
             try {
                 out = new PrintWriter(new FileWriter(currentFile + FILE_TYPE));
+            } catch (FileNotFoundException e) {
+                File file = new File(currentFile + FILE_TYPE);
+
             } catch (IOException e) {
-                File file = new File(PATH + currentFile + FILE_TYPE);
-//                throw new EyeTunesDaoException(
-//                        "Could not save song data.", e);
+                throw new FlooringCompanyPersistenceException(
+                        "Could not properly save order data.", e);
             }
 
             out.println(HEADER);

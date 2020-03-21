@@ -5,6 +5,9 @@
  */
 package com.lds.flooringcompany.service;
 
+import com.lds.flooringcompany.dao.FlooringCompanyFileNotFoundException;
+import com.lds.flooringcompany.dao.FlooringCompanyPersistenceException;
+import com.lds.flooringcompany.dto.DelimiterInclusionException;
 import com.lds.flooringcompany.dto.Order;
 import java.time.LocalDate;
 import java.util.List;
@@ -15,20 +18,27 @@ import java.util.List;
  */
 public interface FlooringCompanyServiceLayer {
     
-    public void loadData();
+    public void loadData() 
+            throws FlooringCompanyFileNotFoundException, DateDiscrepencyException;
     
     public List<Order> listOrders();
     
-    public List<Order> listOrdersForDate(LocalDate date);
+    public List<Order> listOrdersForDate(LocalDate date) 
+            throws InvalidChoiceException;
     
-    public Order createOrder(Order order);
+    public Order validateOrder(Order order) 
+            throws RequiredDataException, InvalidChoiceException;
     
     public Order addOrder(int orderNum, Order order);
     
-    public Order getOrder(LocalDate date, int orderNum);
+    public Order getOrder(LocalDate date, int orderNum) 
+            throws InvalidChoiceException, DateDiscrepencyException;
+    
+    public void editOrder(Order editedOrder, Order order) 
+            throws DelimiterInclusionException;
     
     public Order removeOrder(LocalDate date, int orderNum);
     
-    public void saveEdits();
+    public void saveEdits() throws FlooringCompanyPersistenceException ;
     
 }

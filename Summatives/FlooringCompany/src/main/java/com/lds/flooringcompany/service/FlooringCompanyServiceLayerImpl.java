@@ -6,7 +6,11 @@
 package com.lds.flooringcompany.service;
 
 import com.lds.flooringcompany.dao.FlooringCompanyDao;
+import com.lds.flooringcompany.dao.FlooringCompanyFileNotFoundException;
+import com.lds.flooringcompany.dao.FlooringCompanyPersistenceException;
+import com.lds.flooringcompany.dto.DelimiterInclusionException;
 import com.lds.flooringcompany.dto.Order;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -14,17 +18,22 @@ import java.util.List;
  *
  * @author lydia
  */
-public class FlooringCompanyServiceLayerImpl implements FlooringCompanyServiceLayer{
-    
+public class FlooringCompanyServiceLayerImpl implements FlooringCompanyServiceLayer {
+
     FlooringCompanyDao dao;
-    
-    public FlooringCompanyServiceLayerImpl(FlooringCompanyDao dao){
+
+    public FlooringCompanyServiceLayerImpl(FlooringCompanyDao dao) {
         this.dao = dao;
     }
-    
+
     @Override
-    public void loadData(){
-        dao.loadData();
+    public void loadData()
+            throws FlooringCompanyFileNotFoundException, DateDiscrepencyException {
+        try {
+            dao.loadData();
+        } catch (DelimiterInclusionException e) {
+            //throw new DateDiscrepencyException("Unable to load data due to customer name");
+        }
     }
 
     @Override
@@ -33,20 +42,57 @@ public class FlooringCompanyServiceLayerImpl implements FlooringCompanyServiceLa
     }
 
     @Override
-    public List<Order> listOrdersForDate(LocalDate date) {
+    public List<Order> listOrdersForDate(LocalDate date)
+            throws InvalidChoiceException {
+
+        if (dao.listOrdersForDate(date).isEmpty()) {
+            throw new InvalidChoiceException("No orders placed on this date");
+        }
+
         return dao.listOrdersForDate(date);
     }
 
+    //Change return type to void??
     @Override
-    public Order createOrder(Order order) {
+    public Order validateOrder(Order order)
+            throws RequiredDataException, InvalidChoiceException {
+
+        if (order.getCustomerName().equalsIgnoreCase("N/A")) {
+            throw new RequiredDataException("Customer name is required");
+        }
+
         String state = order.getState();
         String product = order.getProductType();
-        
-        order.setTaxRate(dao.getTaxRate(state));
-        order.setCostPerSqFt(dao.getProductRate(product));
-        order.setLaborCostPerSqFt(dao.getLaborRate(product));
-        
+
+        BigDecimal taxRate = dao.getTaxRate(state);
+        BigDecimal productRate = dao.getProductRate(product);
+        BigDecimal laborRate = dao.getLaborRate(product);
+
+        if (taxRate == null) {
+            throw new InvalidChoiceException("Invalid state entered");
+        }
+
+        if (productRate == null || laborRate == null) {
+            throw new InvalidChoiceException("Invalid product type");
+        }
+
+        order.setTaxRate(taxRate);
+        order.setCostPerSqFt(productRate);
+        order.setLaborCostPerSqFt(laborRate);
+
         return order;
+    }
+
+    @Override
+    public void editOrder(Order editedOrder, Order order) 
+            throws DelimiterInclusionException {
+        order.setCustomerName(editedOrder.getCustomerName());
+        order.setState(editedOrder.getState());
+        order.setTaxRate(editedOrder.getTaxRate());
+        order.setProductType(editedOrder.getProductType());
+        order.setCostPerSqFt(editedOrder.getCostPerSqFt());
+        order.setLaborCostPerSqFt(editedOrder.getLaborCostPerSqFt());
+        order.setArea(editedOrder.getArea());
     }
     
     @Override
@@ -55,17 +101,35 @@ public class FlooringCompanyServiceLayerImpl implements FlooringCompanyServiceLa
     }
 
     @Override
-    public Order getOrder(LocalDate date, int orderNum) {
-        return dao.getOrder(date, orderNum);
+    public Order getOrder(LocalDate givenDate, int orderNum)
+            throws InvalidChoiceException, DateDiscrepencyException {
+
+        if (dao.listOrdersForDate(givenDate).isEmpty()) {
+            throw new InvalidChoiceException("No orders placed on this date");
+        }
+
+        try {
+            Order order = dao.getOrder(orderNum);
+            LocalDate orderDate = order.getOrderDate();
+
+            if (givenDate.equals(orderDate)) {
+                return order;
+            } else {
+                throw new DateDiscrepencyException("No such order number on given date");
+            }
+            
+        } catch (NullPointerException e) {
+            throw new InvalidChoiceException("Order number does not exist");
+        }
     }
 
     @Override
     public Order removeOrder(LocalDate date, int orderNum) {
-        return dao.removeOrder(date, orderNum);
+        return dao.removeOrder(orderNum);
     }
 
     @Override
-    public void saveEdits() {
+    public void saveEdits() throws FlooringCompanyPersistenceException {
         dao.saveEdits();
     }
 

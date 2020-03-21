@@ -5,11 +5,11 @@
  */
 package com.lds.flooringcompany.ui;
 
+import com.lds.flooringcompany.dto.DelimiterInclusionException;
 import com.lds.flooringcompany.dto.Order;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -25,22 +25,21 @@ public class FlooringCompanyView {
     }
 
     public void displayTrainingMode() {
-        io.print("    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
-        io.print("* * * *");
-        io.print("    *  TRAINING MODE");
+        //io.print("    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
+        io.print("\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
+        //io.print("    *");
+        io.print("    * TRAINING MODE");
         io.print("    * Any new or modified data will NOT be saved upon exiting the program.");
-        io.print("    *");
+        //io.print("    *");
     }
 
     public void displayProdMode() {
-        io.print("    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
-        io.print("* * * *");
-        io.print("    *  PROD MODE");
+        //io.print("    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
+        io.print("\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
+        io.print("    * PROD MODE");
         io.print("    * Any new or modified data that has been saved will persist "
                 + "upon exiting the program.");
-        io.print("    *");
-        io.print("    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
-        io.print("* * * *");
+        //io.print("    *");
     }
 
     public String printMenuAndGetSelection() {
@@ -61,7 +60,7 @@ public class FlooringCompanyView {
         return io.readString("Please select from the above choices: ");
     }
 
-    public Order getNewOrderInfo(List<Order> orderList) {
+    public Order getNewOrderInfo(List<Order> orderList) throws DelimiterInclusionException {
         io.print("\nAdd Order:");
 
         Order currentOrder = new Order(orderList.size() + 1);
@@ -90,6 +89,7 @@ public class FlooringCompanyView {
 //            }
 //        }
         return currentOrder;
+
     }
 
     public boolean confirmCommand(String command) {
@@ -106,7 +106,12 @@ public class FlooringCompanyView {
         }
     }
 
-    public void editOrder(Order order) {
+    public Order editOrder(Order order) throws DelimiterInclusionException {
+
+        Order editedOrder = new Order(0);
+
+        editedOrder.setOrderDate(order.getOrderDate());
+
         String name = order.getCustomerName();
         String state = order.getState();
         String product = order.getProductType();
@@ -116,16 +121,25 @@ public class FlooringCompanyView {
                 + "or hit enter if the given information is correct.");
 
         String userName = io.readString("Enter customer name (" + name + "): ");
-        if (!userName.equalsIgnoreCase("N/A")) {
-            order.setCustomerName(userName);
+        if (userName.equalsIgnoreCase("N/A")) {
+            //order.setCustomerName(userName);
+            editedOrder.setCustomerName(name);
+        } else {
+            editedOrder.setCustomerName(userName);
         }
         String userState = io.readString("Enter state (" + state + "): ");
-        if (!userState.equalsIgnoreCase("N/A")) {
-            order.setState(userState);
+        if (userState.equalsIgnoreCase("N/A")) {
+            //order.setState(userState);
+            editedOrder.setState(state);
+        } else {
+            editedOrder.setState(userState);
         }
         String userProduct = io.readString("Enter product type (" + product + "): ");
-        if (!userProduct.equalsIgnoreCase("N/A")) {
-            order.setProductType(userProduct);
+        if (userProduct.equalsIgnoreCase("N/A")) {
+            //order.setProductType(userProduct);
+            editedOrder.setProductType(product);
+        } else {
+            editedOrder.setProductType(userProduct);
         }
 
         boolean validBD = false;
@@ -135,20 +149,22 @@ public class FlooringCompanyView {
                 try {
                     BigDecimal bD = new BigDecimal(userArea);
                     bD = bD.setScale(2, RoundingMode.HALF_UP);
-                    if (bD.compareTo(BigDecimal.ZERO) >= 0) {
+                    if (bD.compareTo(BigDecimal.ZERO) > 0) {
                         validBD = true;
-                        order.setArea(bD);
+                        editedOrder.setArea(bD);
                     } else {
-                        System.out.println("Invalid input");
+                        displayErrorMessage("Invalid input");
                     }
                 } catch (NumberFormatException e) {
-                    System.out.println("Invalid input");
+                    displayErrorMessage("Invalid input");
                 }
             } else {
+                editedOrder.setArea(area);
                 validBD = true;
             }
         }
-        io.print("");
+        //io.print("");
+        return editedOrder;
     }
 
     public LocalDate getDate() {
@@ -197,6 +213,10 @@ public class FlooringCompanyView {
         io.print("\nOrder added.\n");
     }
 
+    public void displayEditSuccessful() {
+        io.print("\nOrder edited.\n");
+    }
+
     public void displayRemoveSuccessful() {
         io.print("\nOrder removed.\n");
     }
@@ -206,20 +226,20 @@ public class FlooringCompanyView {
     }
 
     public void displayCommandUnsuccessful() {
-        io.print("\nUnfortunately that command cannot be completed at this time.\n");
+        io.print("\nCommand cannot be completed at this time.\n");
     }
-    
+
     public void displayUnknownCommand() {
         io.print("\nUnknown Command!!!\n");
     }
 
     public void displayErrorMessage(String errorMsg) {
-        io.print("=== ERROR ===");
-        io.print(errorMsg);
+        io.print("\n===== ERROR =====");
+        io.print(errorMsg + "\n");
     }
 
     public boolean offerToSave() {
-        String ans = io.readString("Enter s if you have not yet saved your changes"
+        String ans = io.readString("\nEnter s if you have not yet saved your changes"
                 + " and would like to. Otherwise hit enter. ");
         if (ans.equalsIgnoreCase("s")) {
             return true;

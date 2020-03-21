@@ -34,6 +34,6 @@
           class="com.lds.flooringcompany.controller.FlooringCompanyController">
         <constructor-arg ref="serviceLayer"/>
         <constructor-arg ref="view"/>
-        <constructor-arg name="prod" value="false"/>
+        <constructor-arg name="prod" value="true"/>
     </bean>
 </beans>
