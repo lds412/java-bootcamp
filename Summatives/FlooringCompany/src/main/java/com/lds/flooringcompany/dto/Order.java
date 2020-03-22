@@ -28,7 +28,7 @@ public class Order {
     private BigDecimal materialCost;
     private BigDecimal laborCost;
     private BigDecimal tax;
-    //private BigDecimal total;
+    private BigDecimal total;
     
     private final String DELIMITER = ",  ";
 
@@ -41,10 +41,6 @@ public class Order {
         return orderNum;
     }
 
-    //KEEP???
-//    public void setOrderNum(int orderNum) {
-//        this.orderNum = orderNum;
-//    }
     public LocalDate getOrderDate() {
         return orderDate;
     }

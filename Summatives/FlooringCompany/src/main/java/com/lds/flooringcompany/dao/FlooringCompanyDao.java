@@ -32,6 +32,8 @@ public interface FlooringCompanyDao {
     
     public void saveEdits() throws FlooringCompanyPersistenceException;
     
+    public int getOrderNum();
+    
     public BigDecimal getTaxRate(String state);
     
     public BigDecimal getProductRate(String product);

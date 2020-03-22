@@ -29,14 +29,11 @@ public class FlooringCompanyDaoStubImpl implements FlooringCompanyDao {
         onlyOrder.setCustomerName("Jones");
 
         onlyOrder.setState("OH");
-        onlyOrder.setTaxRate(new BigDecimal("6.25"));
-        //onlyOrder.setTaxRate(dao.getTaxRate("OH"));
+        onlyOrder.setTaxRate(getTaxRate("OH"));
 
         onlyOrder.setProductType("Wood");
-        onlyOrder.setCostPerSqFt(new BigDecimal("5.15"));
-        //onlyOrder.setCostPerSqFt(dao.getProductRate("Wood"));
-        onlyOrder.setLaborCostPerSqFt(new BigDecimal("4.75"));
-        //onlyOrder.setLaborCostPerSqFt(dao.getLaborRate("Wood"));
+        onlyOrder.setCostPerSqFt(getProductRate("Wood"));
+        onlyOrder.setLaborCostPerSqFt(getLaborRate("Wood"));
 
         onlyOrder.setArea(new BigDecimal("100"));
 
@@ -91,9 +88,14 @@ public class FlooringCompanyDaoStubImpl implements FlooringCompanyDao {
 
     @Override
     public void saveEdits() throws FlooringCompanyPersistenceException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet."); 
     }
 
+    @Override
+    public int getOrderNum(){
+        return onlyOrder.getOrderNum();
+    }
+    
     @Override
     public BigDecimal getTaxRate(String state) {
         switch (state) {

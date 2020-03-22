@@ -27,13 +27,10 @@ public class FlooringCompanyServiceLayerImpl implements FlooringCompanyServiceLa
     }
 
     @Override
-    public void loadData()
-            throws FlooringCompanyFileNotFoundException, DateDiscrepencyException {
-        try {
+    public void loadData() 
+            throws FlooringCompanyFileNotFoundException, DelimiterInclusionException {
+
             dao.loadData();
-        } catch (DelimiterInclusionException e) {
-            //throw new DateDiscrepencyException("Unable to load data due to customer name");
-        }
     }
 
     @Override
@@ -133,4 +130,9 @@ public class FlooringCompanyServiceLayerImpl implements FlooringCompanyServiceLa
         dao.saveEdits();
     }
 
+    @Override
+    public int getOrderNum(){
+        return dao.getOrderNum();
+    }
+    
 }

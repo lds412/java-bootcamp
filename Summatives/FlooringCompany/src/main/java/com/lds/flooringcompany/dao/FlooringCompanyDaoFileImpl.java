@@ -47,6 +47,9 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
     public static final String PREFIX = "Orders_";
 
     public static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MMddyyyy");
+    
+    public static final String TRACKER = "OrderNumTracker: ";
+    public static int OrderNumTracker;
 
     public Set<String> fileNames = new HashSet<>();
 
@@ -84,6 +87,7 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
         LocalDate date = order.getOrderDate();
         String fileName = PREFIX + date.format(FORMATTER);
         fileNames.add(fileName);
+        OrderNumTracker++;
         return order;
     }
 
@@ -104,6 +108,11 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
         writeOrders();
     }
 
+    @Override
+    public int getOrderNum(){
+        return OrderNumTracker;
+    }
+    
     @Override
     public BigDecimal getTaxRate(String state) {
         return taxRates.get(state.toUpperCase());
@@ -136,6 +145,10 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
                     "-_- Could not access file names.", e);
         }
 
+        String OrderNumLine = s.nextLine();
+        String OrderNumber = OrderNumLine.substring(TRACKER.length());
+        OrderNumTracker = Integer.parseInt(OrderNumber);
+        
         while (s.hasNextLine()) {
             fileNames.add(s.nextLine());
         }
@@ -200,12 +213,13 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
 
     private Order unmarshallOrder(String orderAsText, String fileName) 
             throws DelimiterInclusionException {
+        
         String[] orderTokens = orderAsText.split(DELIMITER);
 
         int orderNum = Integer.parseInt(orderTokens[0]);
         Order orderFromFile = new Order(orderNum);
 
-        LocalDate date = LocalDate.parse(fileName.substring(7), FORMATTER);
+        LocalDate date = LocalDate.parse(fileName.substring(PREFIX.length()), FORMATTER);
         orderFromFile.setOrderDate(date);
 
         orderFromFile.setCustomerName(orderTokens[1]);
@@ -263,6 +277,7 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
 
         try {
             out = new PrintWriter(new FileWriter(DATE_FILE));
+            out.println(TRACKER+OrderNumTracker);
             for (String currentFile : fileNames) {
                 out.println(currentFile);
                 out.flush();
@@ -310,7 +325,7 @@ public class FlooringCompanyDaoFileImpl implements FlooringCompanyDao {
             out.println(HEADER);
 
             String orderAsText;
-            LocalDate currentDate = LocalDate.parse(currentFile.substring(7), FORMATTER);
+            LocalDate currentDate = LocalDate.parse(currentFile.substring(PREFIX.length()), FORMATTER);
 
             List<Order> orderList = listOrdersForDate(currentDate);
 

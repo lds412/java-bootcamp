@@ -27,9 +27,6 @@ import java.util.stream.Collectors;
  */
 public class EyeTunesDaoFileImpl implements EyeTunesDao {
 
-    public static final String PATH
-            = "C:\\Users\\lydia\\Documents\\repos\\java-mpls-0220-lds412\\Classwork\\M4\\EyeTunes";
-
     public static final String DELIMITER = "::";
     public static final String ARTIST_FILE = "artist.txt";
 
@@ -169,7 +166,7 @@ public class EyeTunesDaoFileImpl implements EyeTunesDao {
     }
     
     public void createNewFile(String artist) throws EyeTunesDaoException {
-        File file = new File(PATH + artist + ".txt");
+        File file = new File(artist + ".txt");
         fileNames.add(artist);
 
         PrintWriter out;

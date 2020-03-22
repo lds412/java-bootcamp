@@ -25,21 +25,16 @@ public class FlooringCompanyView {
     }
 
     public void displayTrainingMode() {
-        //io.print("    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
         io.print("\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
-        //io.print("    *");
         io.print("    * TRAINING MODE");
         io.print("    * Any new or modified data will NOT be saved upon exiting the program.");
-        //io.print("    *");
     }
 
     public void displayProdMode() {
-        //io.print("    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
         io.print("\n* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
         io.print("    * PROD MODE");
         io.print("    * Any new or modified data that has been saved will persist "
                 + "upon exiting the program.");
-        //io.print("    *");
     }
 
     public String printMenuAndGetSelection() {
@@ -56,14 +51,13 @@ public class FlooringCompanyView {
         io.print("    * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * ");
         io.print("* * * *");
 
-        //Change to io.readInt??
         return io.readString("Please select from the above choices: ");
     }
-
-    public Order getNewOrderInfo(List<Order> orderList) throws DelimiterInclusionException {
+    
+    //Change the return type to void??
+    public Order getNewOrderInfo(Order currentOrder) throws DelimiterInclusionException {
         io.print("\nAdd Order:");
 
-        Order currentOrder = new Order(orderList.size() + 1);
         currentOrder.setOrderDate();
 
         String name = io.readString("Please enter customer name: ");
@@ -78,18 +72,7 @@ public class FlooringCompanyView {
         BigDecimal area = io.readBigDecimal("Please enter area: ", 2, RoundingMode.HALF_UP);
         currentOrder.setArea(area);
 
-        //THIS CODE MAKES SURE A VALUE IS ENTERED
-//        boolean valid = false;
-//        while (!valid) {
-//            if (title.equals("N/A")) {
-//                io.print("\t Please enter a value.");
-//                title = io.readString("\tTitle: ");
-//            } else {
-//                valid = true;
-//            }
-//        }
         return currentOrder;
-
     }
 
     public boolean confirmCommand(String command) {
@@ -122,21 +105,18 @@ public class FlooringCompanyView {
 
         String userName = io.readString("Enter customer name (" + name + "): ");
         if (userName.equalsIgnoreCase("N/A")) {
-            //order.setCustomerName(userName);
             editedOrder.setCustomerName(name);
         } else {
             editedOrder.setCustomerName(userName);
         }
         String userState = io.readString("Enter state (" + state + "): ");
         if (userState.equalsIgnoreCase("N/A")) {
-            //order.setState(userState);
             editedOrder.setState(state);
         } else {
             editedOrder.setState(userState);
         }
         String userProduct = io.readString("Enter product type (" + product + "): ");
         if (userProduct.equalsIgnoreCase("N/A")) {
-            //order.setProductType(userProduct);
             editedOrder.setProductType(product);
         } else {
             editedOrder.setProductType(userProduct);
@@ -163,7 +143,6 @@ public class FlooringCompanyView {
                 validBD = true;
             }
         }
-        //io.print("");
         return editedOrder;
     }
 
@@ -176,10 +155,6 @@ public class FlooringCompanyView {
     }
 
     public void displayOrderList(List<Order> orderList) {
-        //Format?? io.print(order.getOrderDate().format(DateTimeFormatter.ISO_DATE));
-        //String date = orderList.get(0).getOrderDate().toString();
-        //io.print(date);
-        //PRINTING DATE AT THE TOP SEEMS UNNECESSARY
         for (Order currentOrder : orderList) {
             displayOrder(currentOrder);
         }

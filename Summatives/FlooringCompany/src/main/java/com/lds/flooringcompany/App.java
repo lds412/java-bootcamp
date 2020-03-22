@@ -6,7 +6,6 @@
 package com.lds.flooringcompany;
 
 import com.lds.flooringcompany.controller.FlooringCompanyController;
-import com.lds.flooringcompany.service.DateDiscrepencyException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -16,8 +15,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class App {
 
-    //THROWS EXCEPTION???????????
-    public static void main(String[] args) throws DateDiscrepencyException {
+    public static void main(String[] args) {
 
         ApplicationContext ctx
                 = new ClassPathXmlApplicationContext("applicationContext.xml");

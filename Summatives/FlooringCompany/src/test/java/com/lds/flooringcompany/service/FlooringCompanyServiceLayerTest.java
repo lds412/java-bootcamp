@@ -7,13 +7,10 @@ package com.lds.flooringcompany.service;
 
 import com.lds.flooringcompany.dao.FlooringCompanyDao;
 import com.lds.flooringcompany.dao.FlooringCompanyDaoStubImpl;
-import com.lds.flooringcompany.dao.FlooringCompanyFileNotFoundException;
-import com.lds.flooringcompany.dao.FlooringCompanyPersistenceException;
 import com.lds.flooringcompany.dto.DelimiterInclusionException;
 import com.lds.flooringcompany.dto.Order;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,46 +61,49 @@ public class FlooringCompanyServiceLayerTest {
     public void testListOrders() {
         assertEquals(1, service.listOrders().size());
     }
-
+    
     /**
      * Test of listOrdersForDate method, of class FlooringCompanyServiceLayer.
      */
     @Test
     public void testListOrdersForDate() throws Exception {
+        assertEquals(1, service.listOrdersForDate(LocalDate.of(2020, 03, 18)).size());
     }
 
+    @Test
+    public void testListOrdersForDateException() throws Exception {
+        try{
+            service.listOrdersForDate(LocalDate.of(2020, 03, 17));
+            fail("Expected InvalidChoiceException was not thrown.");
+        } catch (InvalidChoiceException e){
+            return;
+        }
+    }
+    
     /**
      * Test of validateOrder method, of class FlooringCompanyServiceLayer.
      */
     @Test
-    public void testCreateOrder() throws Exception {
+    public void testValidateOrder() throws Exception {
         Order order2 = new Order(2);
 
         order2.setOrderDate(LocalDate.of(2020, 03, 18));
-
         order2.setCustomerName("Smith");
-
         order2.setState("IN");
-
         order2.setProductType("Tile");
-
         order2.setArea(new BigDecimal("150"));
 
         service.validateOrder(order2);
     }
 
     @Test
-    public void testCreateOrderInvalidData() throws Exception {
+    public void testValidateOrderInvalidData() throws Exception {
         Order order2 = new Order(2);
 
         order2.setOrderDate(LocalDate.of(2020, 03, 18));
-
         order2.setCustomerName("N/A");
-
         order2.setState("IN");
-
         order2.setProductType("Tile");
-
         order2.setArea(new BigDecimal("150"));
 
         try {
@@ -115,17 +115,13 @@ public class FlooringCompanyServiceLayerTest {
     }
 
     @Test
-    public void testCreateOrderInvalidState() throws Exception {
+    public void testValidateOrderInvalidState() throws Exception {
         Order order2 = new Order(2);
 
         order2.setOrderDate(LocalDate.of(2020, 03, 18));
-
         order2.setCustomerName("Smith");
-
         order2.setState("WI");
-
         order2.setProductType("Tile");
-
         order2.setArea(new BigDecimal("150"));
 
         try {
@@ -137,17 +133,13 @@ public class FlooringCompanyServiceLayerTest {
     }
 
     @Test
-    public void testCreateOrderInvalidProduct() throws Exception {
+    public void testValidateOrderInvalidProduct() throws Exception {
         Order order2 = new Order(2);
 
         order2.setOrderDate(LocalDate.of(2020, 03, 18));
-
         order2.setCustomerName("Smith");
-
         order2.setState("OH");
-
         order2.setProductType("");
-
         order2.setArea(new BigDecimal("150"));
 
         try {
@@ -159,18 +151,16 @@ public class FlooringCompanyServiceLayerTest {
     }
 
     @Test
-    public void testCreateOrderDelimiterInclusion() throws Exception {
+    public void testValidateOrderDelimiterInclusion() throws Exception {
         Order order2 = new Order(2);
 
         order2.setOrderDate(LocalDate.of(2020, 03, 18));
 
         try {
+            
             order2.setCustomerName("Smi,  th");
-
             order2.setState("OH");
-
             order2.setProductType("Tile");
-
             order2.setArea(new BigDecimal("150"));
 
             service.validateOrder(order2);
@@ -180,6 +170,31 @@ public class FlooringCompanyServiceLayerTest {
         }
     }
 
+    @Test
+    public void testEditOrder() throws Exception {
+        
+        Order order2 = new Order(2);
+
+        order2.setOrderDate(LocalDate.of(2020, 03, 18));
+        order2.setCustomerName("Smith");
+        order2.setState("IN");
+        order2.setProductType("Tile");
+        order2.setArea(new BigDecimal("150"));
+        
+        Order editedOrder = service.getOrder(LocalDate.of(2020, 03, 18), 1);
+        
+        service.editOrder(editedOrder, order2);
+        
+        assertEquals(editedOrder.getOrderDate(), order2.getOrderDate());
+        assertEquals(editedOrder.getCustomerName(),order2.getCustomerName());
+        assertEquals(editedOrder.getState(), order2.getState());
+        assertEquals(editedOrder.getTaxRate(), order2.getTaxRate());
+        assertEquals(editedOrder.getProductType(), order2.getProductType());
+        assertEquals(editedOrder.getCostPerSqFt(), order2.getCostPerSqFt());
+        assertEquals(editedOrder.getLaborCostPerSqFt(), order2.getLaborCostPerSqFt());
+        assertEquals(editedOrder.getArea(), order2.getArea());
+    }
+    
     /**
      * Test of addOrder method, of class FlooringCompanyServiceLayer.
      */
@@ -229,6 +244,11 @@ public class FlooringCompanyServiceLayerTest {
         assertNull(order);
     }
 
+    @Test
+    public void getOrderNum(){
+        assertEquals(1, service.getOrderNum());
+    }
+    
     /**
      * Test of saveEdits method, of class FlooringCompanyServiceLayer.
      */

@@ -19,7 +19,7 @@ import java.util.List;
 public interface FlooringCompanyServiceLayer {
     
     public void loadData() 
-            throws FlooringCompanyFileNotFoundException, DateDiscrepencyException;
+            throws FlooringCompanyFileNotFoundException, DelimiterInclusionException;
     
     public List<Order> listOrders();
     
@@ -39,6 +39,7 @@ public interface FlooringCompanyServiceLayer {
     
     public Order removeOrder(LocalDate date, int orderNum);
     
-    public void saveEdits() throws FlooringCompanyPersistenceException ;
+    public void saveEdits() throws FlooringCompanyPersistenceException;
     
+    public int getOrderNum();
 }

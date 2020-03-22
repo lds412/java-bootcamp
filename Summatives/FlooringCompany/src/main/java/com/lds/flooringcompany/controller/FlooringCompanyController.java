@@ -28,13 +28,15 @@ public class FlooringCompanyController {
 
     private boolean prod;
 
-    public FlooringCompanyController(FlooringCompanyServiceLayer service, FlooringCompanyView view, boolean prod) {
+    public FlooringCompanyController(FlooringCompanyServiceLayer service, 
+            FlooringCompanyView view, boolean prod) {
+        
         this.service = service;
         this.view = view;
         this.prod = prod;
     }
 
-    public void run() throws DateDiscrepencyException {
+    public void run() {
         boolean keepGoing = true;
         String menuSelection;
 
@@ -80,7 +82,7 @@ public class FlooringCompanyController {
                 }
             }
             view.displayExitMessage();
-        } catch (FlooringCompanyFileNotFoundException e) {
+        } catch (FlooringCompanyFileNotFoundException | DelimiterInclusionException e) {
             view.displayErrorMessage(e.getMessage());
         }
     }
@@ -104,13 +106,10 @@ public class FlooringCompanyController {
     }
 
     private void addOrder() {
-
         try {
-            List<Order> orderList = service.listOrders();
-            Order newOrder = view.getNewOrderInfo(orderList);
-
+            Order newOrder = new Order(service.getOrderNum());
+            view.getNewOrderInfo(newOrder);
             service.validateOrder(newOrder);
-
             view.displayOrder(newOrder);
 
             if (view.confirmCommand("add")) {
