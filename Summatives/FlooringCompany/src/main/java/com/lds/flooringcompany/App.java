@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.lds.vendingmachine;
+package com.lds.flooringcompany;
 
-import com.lds.vendingmachine.controller.VendingMachineController;
+import com.lds.flooringcompany.controller.FlooringCompanyController;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -19,8 +19,8 @@ public class App {
 
         ApplicationContext ctx
                 = new ClassPathXmlApplicationContext("applicationContext.xml");
-        VendingMachineController controller
-                = ctx.getBean("controller", VendingMachineController.class);
+        FlooringCompanyController controller
+                = ctx.getBean("controller", FlooringCompanyController.class);
         controller.run();
     }
 }

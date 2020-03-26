@@ -27,9 +27,6 @@ import java.util.stream.Collectors;
  */
 public class EyeTunesDaoFileImpl implements EyeTunesDao {
 
-    public static final String PATH
-            = "C:\\Users\\lydia\\Documents\\repos\\java-mpls-0220-lds412\\Classwork\\M4\\EyeTunes";
-
     public static final String DELIMITER = "::";
     public static final String ARTIST_FILE = "artist.txt";
 
@@ -148,6 +145,15 @@ public class EyeTunesDaoFileImpl implements EyeTunesDao {
                 .collect(Collectors.groupingBy(Song::getArtistName));
     }
 
+    @Override
+    public boolean checkSongExists(String songTitle) throws EyeTunesDaoException {
+        boolean songExists = false;
+        if (songs.containsKey(songTitle.toUpperCase())) {
+            songExists = true;
+        }
+        return songExists;
+    }
+    
     public void checkArtist(String title) throws EyeTunesDaoException {
         Song aSong = songs.get(title.toUpperCase());
         String artist = aSong.getArtistName();
@@ -158,18 +164,9 @@ public class EyeTunesDaoFileImpl implements EyeTunesDao {
         }
         createNewFile(artist);
     }
-
-    @Override
-    public boolean checkSongExists(String songTitle) throws EyeTunesDaoException {
-        boolean songExists = false;
-        if (songs.containsKey(songTitle.toUpperCase())) {
-            songExists = true;
-        }
-        return songExists;
-    }
     
     public void createNewFile(String artist) throws EyeTunesDaoException {
-        File file = new File(PATH + artist + ".txt");
+        File file = new File(artist + ".txt");
         fileNames.add(artist);
 
         PrintWriter out;
