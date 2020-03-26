@@ -1,4 +1,4 @@
 OrderNumber, CustomerName, State, TaxRate, ProductType, Area, CostPerSquareFoot, LaborCostPerSquareFoot, MaterialCost, LaborCost, Tax, Total
 11,  Soprano,  PA,  6.75,  Carpet,  45.00,  2.25,  2.10,  101.25,  94.50,  13.21,  208.96
 12,  Doe,  IN,  6.00,  Tile,  65.00,  3.50,  4.15,  227.50,  269.75,  29.84,  527.09
-14,  Miller,  PA,  6.75,  Carpet,  130.00,  2.25,  2.10,  292.50,  273.00,  38.17,  603.67
+14,  Jim, Smith,  PA,  6.75,  Carpet,  130.00,  2.25,  2.10,  292.50,  273.00,  38.17,  603.67
