@@ -1,0 +1,17 @@
+com\lds\classroster\dao\ClassRosterPersistenceException.class
+com\lds\classroster\service\ClassRosterDuplicateIdException.class
+com\lds\classroster\service\ClassRosterServiceLayer.class
+com\lds\classroster\service\ClassRosterDataValidationException.class
+com\lds\classroster\controller\ClassRosterController.class
+com\lds\classroster\dao\ClassRosterAuditDaoFileImpl.class
+com\lds\classroster\App.class
+com\lds\classroster\dao\ClassRosterAuditDaoStubImpl.class
+com\lds\classroster\dao\ClassRosterDao.class
+com\lds\classroster\dao\ClassRosterDaoStubImpl.class
+com\lds\classroster\service\ClassRosterServiceLayerImpl.class
+com\lds\classroster\ui\UserIOConsoleImpl.class
+com\lds\classroster\dao\ClassRosterDaoFileImpl.class
+com\lds\classroster\ui\UserIO.class
+com\lds\classroster\dto\Student.class
+com\lds\classroster\dao\ClassRosterAuditDao.class
+com\lds\classroster\ui\ClassRosterView.class
