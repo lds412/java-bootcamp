@@ -1,0 +1,9 @@
+com\lds\vendingmachine\ui\UserIO.class
+com\lds\vendingmachine\dao\VendingMachineDao.class
+com\lds\vendingmachine\App.class
+com\lds\vendingmachine\service\VendingMachineServiceLayer.class
+com\lds\vendingmachine\ui\UserIOConsoleImpl.class
+com\lds\vendingmachine\dao\VendingMachineAuditDao.class
+com\lds\vendingmachine\dto\FoodItem.class
+com\lds\vendingmachine\dao\VendingMachineAuditDaoFileImpl.class
+com\lds\vendingmachine\service\VendingMachineServiceLayerImpl.class
