@@ -43,7 +43,9 @@ CREATE TABLE AmenityCombo (
     HasRefrigerator BOOL,
     HasMicrowave BOOL,
     HasOven BOOL,
-    HasJacuzzi BOOL
+    HasJacuzzi BOOL,
+    FOREIGN KEY fk_AmenityCombo_Jacuzzi (HasJacuzzi)
+		REFERENCES Jacuzzi (HasJacuzzi)
 );
 
 CREATE TABLE RoomType (

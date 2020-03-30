@@ -99,7 +99,7 @@ SELECT
     r.EndDate
 FROM ReservationRoom rr
 INNER JOIN Reservation r ON rr.ReservationId = r.ReservationId
-WHERE NumGuests >=3 AND (StartDate LIKE '2023-04-__' OR EndDate LIKE '2023-04-__');
+WHERE rr.AdultNum + rr.ChildNum >= 3 AND (StartDate LIKE '2023-04-__' OR EndDate LIKE '2023-04-__');
 --------------------
 -- None
 
